@@ -37,7 +37,7 @@ export function MapPageClient() {
         {isLoading && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80 backdrop-blur-sm">
             <div className="text-center">
-              <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-golmok-primary border-t-transparent" />
+              <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
               <p className="text-xs text-gray-500">상권 데이터 불러오는 중...</p>
             </div>
           </div>

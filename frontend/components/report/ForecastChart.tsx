@@ -79,10 +79,10 @@ export function ForecastChart({ areaCd, history = [] }: Props) {
   const referenceQuarter = history.at(-1)?.quarter ?? chartData[Math.max(0, history.length - 1)]?.quarter;
 
   return (
-    <section className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
+    <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
       <div className="mb-4">
-        <h2 className="text-xl font-black text-golmok-text-main">매출 예측</h2>
-        <p className="text-sm text-golmok-text-muted">
+        <h2 className="text-xl font-black text-brand-text-main">매출 예측</h2>
+        <p className="text-sm text-brand-text-muted">
           {data?.trend_summary ?? "향후 4분기 예측을 불러오는 중입니다."}
           {error ? " 샘플 예측 데이터를 표시합니다." : ""}
         </p>
@@ -103,7 +103,7 @@ export function ForecastChart({ areaCd, history = [] }: Props) {
           )}
         </ComposedChart>
       </ResponsiveContainer>
-      <p className="mt-3 text-xs text-golmok-text-muted">
+      <p className="mt-3 text-xs text-brand-text-muted">
         모델 신뢰도: {Math.round((data?.confidence ?? 0) * 100)}%
       </p>
     </section>

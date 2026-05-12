@@ -85,25 +85,28 @@ export function ChatInput({ onSend, disabled = false, initialValue = "" }: Props
       className={cn(
         "flex items-end gap-2 rounded-2xl border bg-white p-2 shadow-card",
         "transition-all duration-200",
-        "focus-within:border-golmok-primary focus-within:ring-2 focus-within:ring-golmok-primary/15",
+        "focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-primary/15",
         disabled ? "opacity-60" : "border-gray-200",
       )}
     >
       {/* Voice button */}
-      <button
-        type="button"
-        onClick={toggleVoice}
-        disabled={disabled}
-        className={cn(
-          "shrink-0 rounded-xl p-2 transition-colors",
-          listening
-            ? "bg-red-100 text-red-500 hover:bg-red-200"
-            : "text-gray-400 hover:bg-gray-100 hover:text-gray-600",
-        )}
-        aria-label={listening ? "음성 입력 중지" : "음성 입력 시작"}
-      >
-        {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-      </button>
+      <div className="flex shrink-0 flex-col items-center gap-1">
+        <button
+          type="button"
+          onClick={toggleVoice}
+          disabled={disabled}
+          className={cn(
+            "rounded-xl p-2 transition-colors",
+            listening
+              ? "bg-red-100 text-red-500 hover:bg-red-200"
+              : "text-gray-400 hover:bg-gray-100 hover:text-gray-600",
+          )}
+          aria-label={listening ? "음성 입력 중지" : "음성 입력 시작"}
+        >
+          {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+        </button>
+        {listening && <span className="text-[10px] font-bold text-red-500">듣는 중</span>}
+      </div>
 
       {/* Textarea */}
       <div className="relative flex flex-1 flex-col">
@@ -141,8 +144,8 @@ export function ChatInput({ onSend, disabled = false, initialValue = "" }: Props
         disabled={disabled || !text.trim() || isOverLimit}
         className={cn(
           "shrink-0 rounded-xl p-2.5 transition-colors",
-          "bg-golmok-primary text-white",
-          "hover:bg-golmok-primary-dark",
+          "bg-brand-primary text-white",
+          "hover:bg-brand-primary-dark",
           "disabled:cursor-not-allowed disabled:opacity-40",
         )}
         aria-label="메시지 전송"

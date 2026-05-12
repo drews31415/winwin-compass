@@ -23,7 +23,7 @@ export interface MapFilters {
   search: string;
 }
 
-export const AREA_TYPES = ["골목상권", "전통시장", "발달상권", "관광특구"] as const;
+export const AREA_TYPES = ["지역상권", "전통시장", "발달상권", "관광특구"] as const;
 export const RISK_LEVELS = ["낮음", "중간", "높음"] as const;
 export const INDUSTRIES  = ["카페", "음식점", "편의점", "의류", "기타"] as const;
 

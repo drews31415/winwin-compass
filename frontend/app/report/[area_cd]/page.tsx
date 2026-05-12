@@ -62,18 +62,18 @@ type ReportResponse = {
 };
 
 const AREA_META: Record<string, { area_nm: string; gu_nm: string; area_type: string }> = {
-  "3110016": { area_nm: "종로3가", gu_nm: "종로구", area_type: "골목상권" },
+  "3110016": { area_nm: "종로3가", gu_nm: "종로구", area_type: "지역상권" },
   "3130210": { area_nm: "홍대입구", gu_nm: "마포구", area_type: "발달상권" },
-  "3120190": { area_nm: "연남동", gu_nm: "마포구", area_type: "골목상권" },
+  "3120190": { area_nm: "연남동", gu_nm: "마포구", area_type: "지역상권" },
   "3111042": { area_nm: "성수역", gu_nm: "성동구", area_type: "발달상권" },
   "3130154": { area_nm: "신촌역", gu_nm: "서대문구", area_type: "발달상권" },
 };
 
-const RECENT_KEY = "golmok-recent-reports";
+const RECENT_KEY = "brand-recent-reports";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 function sampleReport(areaCd: string): ReportResponse {
-  const meta = AREA_META[areaCd] ?? { area_nm: "종로3가", gu_nm: "종로구", area_type: "골목상권" };
+  const meta = AREA_META[areaCd] ?? { area_nm: "종로3가", gu_nm: "종로구", area_type: "지역상권" };
 
   return {
     ...meta,
@@ -140,7 +140,7 @@ ${meta.area_nm} 상권은 점심과 저녁 매출 비중이 높고 20~30대 방�
         source_url: "https://www.semas.or.kr",
       },
       {
-        program_nm: "서울시 골목상권 활성화 지원",
+        program_nm: "서울시 지역상권 활성화 지원",
         category: "보조금",
         budget_max: 3000,
         apply_end: "2026-07-31",
@@ -262,48 +262,48 @@ export default function ReportDetailPage() {
 
   if (isLoading || !report) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-golmok-surface">
+      <div className="flex min-h-screen items-center justify-center bg-brand-surface">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-golmok-primary border-t-transparent" />
-          <p className="text-sm text-golmok-text-muted">리포트를 불러오는 중입니다.</p>
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
+          <p className="text-sm text-brand-text-muted">리포트를 불러오는 중입니다.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-golmok-surface px-4 py-8 pb-24 lg:px-10 lg:py-10">
+    <div className="min-h-screen bg-brand-surface px-4 py-8 pb-24 lg:px-10 lg:py-10">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         {error && (
-          <div className="rounded-lg border border-golmok-accent/30 bg-golmok-accent-light/50 px-4 py-3 text-sm text-golmok-text-main">
+          <div className="rounded-lg border border-brand-accent/30 bg-brand-accent-light/50 px-4 py-3 text-sm text-brand-text-main">
             백엔드 리포트 응답을 받지 못해 샘플 데이터로 화면을 표시합니다. ({error})
           </div>
         )}
 
-        <header className="grid gap-5 rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card lg:grid-cols-[1fr_auto]">
+        <header className="grid gap-5 rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card lg:grid-cols-[1fr_auto]">
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-golmok-primary/10 px-3 py-1 text-sm font-semibold text-golmok-primary">
+              <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-sm font-semibold text-brand-primary">
                 {report.area_type}
               </span>
-              <span className="text-sm font-medium text-golmok-text-muted">{report.gu_nm}</span>
+              <span className="text-sm font-medium text-brand-text-muted">{report.gu_nm}</span>
             </div>
             <div>
-              <h1 className="font-display text-3xl font-black text-golmok-text-main sm:text-4xl">
+              <h1 className="font-display text-3xl font-black text-brand-text-main sm:text-4xl">
                 {report.area_nm} 상권 리포트
               </h1>
-              <p className="mt-2 text-sm text-golmok-text-muted">
+              <p className="mt-2 text-sm text-brand-text-muted">
                 공공데이터 기반 매출, 점포, 인구, 정책 정보를 종합해 창업 관점으로 정리했습니다.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button asChild className="bg-golmok-primary hover:bg-golmok-primary-dark">
+              <Button asChild className="bg-brand-primary hover:bg-brand-primary-dark">
                 <Link href={`/chat?area=${encodeURIComponent(report.area_nm)}`}>
                   <Bot className="mr-2 h-4 w-4" />
                   AI에게 이 상권 물어보기
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="border-golmok-primary/30 text-golmok-primary hover:bg-golmok-primary/10">
+              <Button asChild variant="outline" className="border-brand-primary/30 text-brand-primary hover:bg-brand-primary/10">
                 <Link
                   href={`/marketing?area=${encodeURIComponent(report.area_nm)}&risk=${encodeURIComponent(
                     `${report.area_nm} 상권 폐업 위험 ${report.risk_score}점`,
@@ -371,16 +371,16 @@ export default function ReportDetailPage() {
             </ResponsiveContainer>
           </ChartPanel>
 
-          <section className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
+          <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
             <div className="mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-golmok-primary" />
-              <h2 className="text-xl font-black text-golmok-text-main">AI 리포트</h2>
+              <Users className="h-5 w-5 text-brand-primary" />
+              <h2 className="text-xl font-black text-brand-text-main">AI 리포트</h2>
             </div>
             <ReactMarkdown
               components={{
-                h2: ({ children }) => <h2 className="mb-2 mt-5 text-xl font-black text-golmok-primary first:mt-0">{children}</h2>,
-                p: ({ children }) => <p className="mb-3 leading-7 text-golmok-text-main">{children}</p>,
-                li: ({ children }) => <li className="mb-1 leading-7 text-golmok-text-main">{children}</li>,
+                h2: ({ children }) => <h2 className="mb-2 mt-5 text-xl font-black text-brand-primary first:mt-0">{children}</h2>,
+                p: ({ children }) => <p className="mb-3 leading-7 text-brand-text-main">{children}</p>,
+                li: ({ children }) => <li className="mb-1 leading-7 text-brand-text-main">{children}</li>,
                 ul: ({ children }) => <ul className="mb-3 list-disc pl-5">{children}</ul>,
               }}
             >
@@ -390,7 +390,16 @@ export default function ReportDetailPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-black text-golmok-text-main">추천 정책</h2>
+          <h2 className="text-xl font-black text-brand-text-main">추천 정책</h2>
+          <div className="rounded-lg border border-brand-primary/10 bg-white p-4 text-sm leading-6 text-brand-text-muted shadow-card">
+            <strong className="text-brand-text-main">폐업 위험 {Math.round(report.risk_score)}점 기준 추천:</strong>{" "}
+            {report.risk_score >= 70
+              ? "긴급 경영안정, 저금리 대출, 보증 지원을 먼저 검토하세요."
+              : report.risk_score >= 40
+                ? "운영 안정 자금과 컨설팅, 디지털 전환 지원을 함께 확인하세요."
+                : "초기 창업비와 홍보 지원 중심으로 검토하세요."}{" "}
+            현재 화면은 샘플 정책 기반 데모이며 정책 DB는 확장 예정입니다.
+          </div>
           <div className="grid gap-4 md:grid-cols-3">
             {report.matched_policies.slice(0, 3).map((policy, index) => (
               <PolicyCard key={policy.id ?? policy.program_nm ?? index} policy={policy} />
@@ -404,10 +413,10 @@ export default function ReportDetailPage() {
 
 function ChartPanel({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
+    <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
       <div className="mb-4">
-        <h2 className="text-xl font-black text-golmok-text-main">{title}</h2>
-        <p className="text-sm text-golmok-text-muted">{subtitle}</p>
+        <h2 className="text-xl font-black text-brand-text-main">{title}</h2>
+        <p className="text-sm text-brand-text-muted">{subtitle}</p>
       </div>
       {children}
     </section>
@@ -420,20 +429,20 @@ function PolicyCard({ policy }: { policy: ReportPolicy }) {
   const href = policy.source_url ?? "#";
 
   return (
-    <article className="rounded-lg border border-golmok-primary/10 bg-white p-4 shadow-card">
+    <article className="rounded-lg border border-brand-primary/10 bg-white p-4 shadow-card">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold text-golmok-primary">{policy.category ?? "지원사업"}</p>
-          <h3 className="mt-1 text-base font-black text-golmok-text-main">{title}</h3>
+          <p className="text-xs font-semibold text-brand-primary">{policy.category ?? "지원사업"}</p>
+          <h3 className="mt-1 text-base font-black text-brand-text-main">{title}</h3>
         </div>
-        <span className="rounded-full bg-golmok-risk-low/10 px-2 py-1 text-xs font-bold text-golmok-risk-low">
+        <span className="rounded-full bg-brand-risk-low/10 px-2 py-1 text-xs font-bold text-brand-risk-low">
           추천
         </span>
       </div>
-      <p className="text-sm font-semibold text-golmok-text-main">{amount}</p>
-      <p className="mt-1 text-sm text-golmok-text-muted">신청기간: {policy.apply_end ?? "상시 또는 공고 확인"}</p>
-      {policy.reason && <p className="mt-3 text-sm leading-6 text-golmok-text-muted">{policy.reason}</p>}
-      <Button asChild variant="outline" className="mt-4 w-full border-golmok-primary/30 text-golmok-primary hover:bg-golmok-primary/10">
+      <p className="text-sm font-semibold text-brand-text-main">{amount}</p>
+      <p className="mt-1 text-sm text-brand-text-muted">신청기간: {policy.apply_end ?? "상시 또는 공고 확인"}</p>
+      {policy.reason && <p className="mt-3 text-sm leading-6 text-brand-text-muted">{policy.reason}</p>}
+      <Button asChild variant="outline" className="mt-4 w-full border-brand-primary/30 text-brand-primary hover:bg-brand-primary/10">
         <Link href={href} target={href === "#" ? undefined : "_blank"} rel="noreferrer">
           신청하기
           <ExternalLink className="ml-2 h-4 w-4" />

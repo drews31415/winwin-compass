@@ -57,31 +57,31 @@ const STATS = [
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-golmok-surface">
+    <div className="flex min-h-screen flex-col bg-brand-surface">
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
       <section className="relative flex flex-col items-center px-4 pb-16 pt-20 text-center lg:pt-28">
         {/* 배경 장식 */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-golmok-primary/6 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-brand-primary/6 to-transparent"
         />
 
         {/* 배지 */}
-        <span className="relative mb-5 inline-flex items-center gap-1.5 rounded-full border border-golmok-primary/20 bg-golmok-primary/8 px-4 py-1.5 text-xs font-medium text-golmok-primary">
-          <span className="h-1.5 w-1.5 rounded-full bg-golmok-primary-light animate-pulse" />
+        <span className="relative mb-5 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-4 py-1.5 text-xs font-medium text-brand-primary">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand-primary-light animate-pulse" />
           서울시 공공데이터 기반
         </span>
 
         {/* 타이틀 */}
-        <h1 className="relative mb-4 font-display text-4xl font-bold leading-tight tracking-tight text-golmok-text-main sm:text-5xl lg:text-6xl">
+        <h1 className="relative mb-4 font-display text-4xl font-bold leading-tight tracking-tight text-brand-text-main sm:text-5xl lg:text-6xl">
           내 상권,{" "}
           <span className="text-gradient">데이터로 보다</span>
         </h1>
 
         {/* 서브타이틀 */}
-        <p className="relative mb-10 max-w-md text-base text-golmok-text-muted sm:text-lg">
-          서울시 공공데이터 기반 골목상권 AI 분석 서비스
+        <p className="relative mb-10 max-w-md text-base text-brand-text-muted sm:text-lg">
+          서울시 공공데이터 기반 지역상권 AI 분석 서비스
         </p>
 
         {/* 검색창 */}
@@ -93,7 +93,7 @@ export default function HomePage() {
             "flex items-center overflow-hidden rounded-2xl",
             "border border-gray-200 bg-white shadow-card",
             "transition-all duration-200",
-            "focus-within:border-golmok-primary focus-within:shadow-card-hover focus-within:ring-2 focus-within:ring-golmok-primary/15",
+            "focus-within:border-brand-primary focus-within:shadow-card-hover focus-within:ring-2 focus-within:ring-brand-primary/15",
           )}
         >
           <Search className="ml-4 h-5 w-5 shrink-0 text-gray-400" />
@@ -108,9 +108,9 @@ export default function HomePage() {
             type="submit"
             className={cn(
               "m-1.5 shrink-0 rounded-xl px-5 py-2.5",
-              "bg-golmok-primary text-sm font-medium text-white",
-              "transition-colors hover:bg-golmok-primary-dark",
-              "focus:outline-none focus:ring-2 focus:ring-golmok-primary/40",
+              "bg-brand-primary text-sm font-medium text-white",
+              "transition-colors hover:bg-brand-primary-dark",
+              "focus:outline-none focus:ring-2 focus:ring-brand-primary/40",
             )}
           >
             검색
@@ -127,7 +127,7 @@ export default function HomePage() {
                 "rounded-full border border-gray-200 bg-white px-3.5 py-1.5",
                 "text-xs text-gray-600 shadow-sm",
                 "transition-all duration-150",
-                "hover:border-golmok-primary hover:text-golmok-primary hover:shadow-card",
+                "hover:border-brand-primary hover:text-brand-primary hover:shadow-card",
               )}
             >
               {tag}
@@ -138,7 +138,7 @@ export default function HomePage() {
 
       {/* ── 2. 빠른 시작 카드 ─────────────────────────────────────────────── */}
       <section className="mx-auto w-full max-w-3xl px-4 pb-14">
-        <h2 className="mb-6 text-center text-lg font-semibold text-golmok-text-main">
+        <h2 className="mb-6 text-center text-lg font-semibold text-brand-text-main">
           무엇을 도와드릴까요?
         </h2>
 
@@ -150,7 +150,7 @@ export default function HomePage() {
                   "flex h-full flex-col rounded-2xl border-2 border-gray-100 bg-white p-6",
                   "shadow-card",
                   "transition-all duration-200",
-                  "group-hover:border-golmok-primary group-hover:-translate-y-1 group-hover:shadow-card-hover",
+                  "group-hover:border-brand-primary group-hover:-translate-y-1 group-hover:shadow-card-hover",
                 )}
               >
                 {/* 이모지 아이콘 */}
@@ -165,7 +165,7 @@ export default function HomePage() {
                   {card.emoji}
                 </span>
 
-                <h3 className="mb-1.5 font-semibold text-gray-900 transition-colors group-hover:text-golmok-primary">
+                <h3 className="mb-1.5 font-semibold text-gray-900 transition-colors group-hover:text-brand-primary">
                   {card.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-gray-500">
@@ -173,7 +173,7 @@ export default function HomePage() {
                 </p>
 
                 {/* 화살표 */}
-                <span className="mt-4 text-xs font-medium text-golmok-primary-light opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="mt-4 text-xs font-medium text-brand-primary-light opacity-0 transition-opacity group-hover:opacity-100">
                   바로가기 →
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function HomePage() {
                 key={label}
                 className="flex flex-col items-center py-7 text-center"
               >
-                <span className="font-display text-3xl font-bold text-golmok-primary sm:text-4xl">
+                <span className="font-display text-3xl font-bold text-brand-primary sm:text-4xl">
                   <StatsCounter target={target} suffix={suffix} />
                 </span>
                 <span className="mt-1.5 text-xs text-gray-500">{label}</span>

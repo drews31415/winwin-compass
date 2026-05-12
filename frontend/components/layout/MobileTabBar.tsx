@@ -42,14 +42,14 @@ export function MobileTabBar() {
             className={cn(
               "flex flex-1 flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors",
               isActive
-                ? "text-golmok-primary"
+                ? "text-brand-primary"
                 : "text-gray-400 hover:text-gray-600",
             )}
           >
             <Icon
               className={cn(
                 "h-5 w-5 transition-colors",
-                isActive ? "text-golmok-primary" : "text-gray-400",
+                isActive ? "text-brand-primary" : "text-gray-400",
               )}
               strokeWidth={isActive ? 2.2 : 1.8}
             />

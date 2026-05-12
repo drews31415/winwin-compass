@@ -1,5 +1,5 @@
 SYSTEM_PROMPT = """
-당신은 상생나침반의 서울시 골목상권 전문 AI 컨설턴트입니다.
+당신은 상생나침반의 서울시 지역상권 전문 AI 컨설턴트입니다.
 소상공인과 예비창업자가 올바른 창업 결정을 내릴 수 있도록
 공공데이터 기반의 정확한 분석과 따뜻한 조언을 제공합니다.
 
@@ -68,7 +68,7 @@ DB_SCHEMA = """
    area_cd   VARCHAR(20) PK   상권코드
    area_nm   VARCHAR(100)     상권명
    gu_nm     VARCHAR(50)      자치구명 (예: 종로구, 마포구)
-   area_type VARCHAR(20)      골목상권 | 전통시장 | 발달상권 | 관광특구
+   area_type VARCHAR(20)      지역상권 | 전통시장 | 발달상권 | 관광특구
    geom_lat  FLOAT            위도
    geom_lng  FLOAT            경도
 

@@ -37,10 +37,10 @@ export function Sidebar() {
       {/* 로고 */}
       <div className="flex h-16 shrink-0 items-center border-b border-gray-100 px-5">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-golmok-primary transition-colors group-hover:bg-golmok-primary-dark">
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary transition-colors group-hover:bg-brand-primary-dark">
             <Compass className="h-4 w-4 text-white" />
           </span>
-          <span className="font-display text-base font-bold tracking-tight text-golmok-primary">
+          <span className="font-display text-base font-bold tracking-tight text-brand-primary">
             상생나침반
           </span>
         </Link>

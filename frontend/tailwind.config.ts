@@ -26,7 +26,7 @@ const config: Config = {
       // ── 컬러 ─────────────────────────────────────────────────────────────
       colors: {
         // 브랜드 토큰
-        golmok: {
+        brand: {
           primary:      "#2D6A4F",
           "primary-light": "#52B788",
           "primary-dark":  "#1B4332",

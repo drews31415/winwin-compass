@@ -232,8 +232,8 @@ export default function MapboxMap({ areas, selectedArea, onSelectArea }: Props) 
           "absolute left-3 top-3 z-10 flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium shadow-card",
           "transition-colors",
           heatmap
-            ? "border-golmok-primary bg-golmok-primary text-white"
-            : "border-gray-200 bg-white text-gray-600 hover:border-golmok-primary/50",
+            ? "border-brand-primary bg-brand-primary text-white"
+            : "border-gray-200 bg-white text-gray-600 hover:border-brand-primary/50",
         )}
       >
         <Layers className="h-3.5 w-3.5" />

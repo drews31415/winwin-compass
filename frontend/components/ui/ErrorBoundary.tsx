@@ -28,11 +28,11 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return this.props.fallback ?? (
-        <div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-golmok-risk-high/20 bg-white p-8 text-center">
-          <AlertTriangle className="mb-3 h-8 w-8 text-golmok-risk-high" />
-          <h2 className="text-lg font-bold text-golmok-text-main">화면을 불러오지 못했습니다</h2>
-          <p className="mt-1 text-sm text-golmok-text-muted">잠시 후 다시 시도해 주세요.</p>
-          <Button className="mt-4 bg-golmok-primary hover:bg-golmok-primary-dark" onClick={() => this.setState({ hasError: false })}>
+        <div className="flex min-h-64 flex-col items-center justify-center rounded-lg border border-brand-risk-high/20 bg-white p-8 text-center">
+          <AlertTriangle className="mb-3 h-8 w-8 text-brand-risk-high" />
+          <h2 className="text-lg font-bold text-brand-text-main">화면을 불러오지 못했습니다</h2>
+          <p className="mt-1 text-sm text-brand-text-muted">잠시 후 다시 시도해 주세요.</p>
+          <Button className="mt-4 bg-brand-primary hover:bg-brand-primary-dark" onClick={() => this.setState({ hasError: false })}>
             다시 시도
           </Button>
         </div>

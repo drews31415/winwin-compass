@@ -49,7 +49,7 @@ railway up backend --path-as-root --service winwin-compass --detach
 
 Use TypeScript for frontend code and Python 3.11+ for backend code. Prefer 2-space indentation in TSX/TS and 4-space indentation in Python. Name React components in `PascalCase`, hooks as `useSomething`, backend modules in `snake_case`, and route files by feature, e.g. `report.py`.
 
-Use Tailwind utilities and existing UI components in `frontend/components/ui/`. Keep API response shapes explicit when consuming backend endpoints. Keep the existing `golmok-*` Tailwind token names unless doing a dedicated design-token migration.
+Use Tailwind utilities and existing UI components in `frontend/components/ui/`. Keep API response shapes explicit when consuming backend endpoints. Keep the existing `brand-*` Tailwind token names unless doing a dedicated design-token migration.
 
 ## Testing Guidelines
 

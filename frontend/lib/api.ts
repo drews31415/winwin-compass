@@ -6,6 +6,8 @@ export type UserContext = {
   capital?: number;
   age?: number;
   is_new?: boolean;
+  user_types?: string[];
+  risk_score?: number;
 };
 
 export type Policy = {
@@ -22,8 +24,11 @@ export type Policy = {
   apply_end?: string;
   source_url?: string;
   reason?: string;
+  match_reason?: string;
   match_score?: number;
   score?: number;
+  badges?: string[];
+  priority?: string;
 };
 
 export type PolicyMatchParams = {
@@ -32,6 +37,8 @@ export type PolicyMatchParams = {
   capital?: number;
   age?: number;
   is_new?: boolean;
+  user_types?: string[] | string;
+  risk_score?: number;
 };
 
 export type AreaFilters = {
@@ -147,9 +154,13 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-function queryString(params?: Record<string, string | number | boolean | undefined | null>) {
+function queryString(params?: Record<string, string | number | boolean | string[] | undefined | null>) {
   const query = new URLSearchParams();
   Object.entries(params ?? {}).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      if (value.length) query.set(key, value.join(","));
+      return;
+    }
     if (value !== undefined && value !== null && value !== "") query.set(key, String(value));
   });
   const value = query.toString();

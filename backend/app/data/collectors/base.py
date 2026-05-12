@@ -75,7 +75,7 @@ class BaseCollector:
     @staticmethod
     def _make_cache_key(url: str, params: dict | None) -> str:
         raw = url + json.dumps(params or {}, sort_keys=True)
-        return "golmok:http:" + hashlib.sha1(raw.encode()).hexdigest()
+        return "winwin:http:" + hashlib.sha1(raw.encode()).hexdigest()
 
     async def _cache_get(self, key: str) -> dict | None:
         try:

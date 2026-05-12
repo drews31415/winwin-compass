@@ -40,16 +40,16 @@ export function RiskDetail({ areaCd }: { areaCd: string }) {
   const risk = data ?? SAMPLE_RISK;
 
   return (
-    <section className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
+    <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
       <div className="mb-5 flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-xl font-black text-golmok-text-main">위험 요인 상세</h2>
-          <p className="text-sm text-golmok-text-muted">
+          <h2 className="text-xl font-black text-brand-text-main">위험 요인 상세</h2>
+          <p className="text-sm text-brand-text-muted">
             {risk.compared_to_avg}
             {error ? " 샘플 위험도 데이터를 표시합니다." : ""}
           </p>
         </div>
-        <span className="rounded-full bg-golmok-accent/15 px-3 py-1 text-sm font-bold text-golmok-accent">
+        <span className="rounded-full bg-brand-accent/15 px-3 py-1 text-sm font-bold text-brand-accent">
           {risk.risk_score}점 · {risk.risk_level}
         </span>
       </div>
@@ -58,28 +58,28 @@ export function RiskDetail({ areaCd }: { areaCd: string }) {
         {risk.main_risk_factors.slice(0, 3).map((factor) => (
           <div key={factor.factor}>
             <div className="mb-1 flex items-center justify-between text-sm">
-              <span className="font-bold text-golmok-text-main">{factor.factor}</span>
-              <span className="text-golmok-text-muted">{factor.value}</span>
+              <span className="font-bold text-brand-text-main">{factor.factor}</span>
+              <span className="text-brand-text-muted">{factor.value}</span>
             </div>
             <div className="h-3 overflow-hidden rounded-full bg-gray-100">
               <div
-                className="h-full rounded-full bg-golmok-primary"
+                className="h-full rounded-full bg-brand-primary"
                 style={{ width: `${Math.min(100, Math.round(factor.contribution * 100))}%` }}
               />
             </div>
-            <p className="mt-1 text-sm leading-6 text-golmok-text-muted">{factor.description}</p>
+            <p className="mt-1 text-sm leading-6 text-brand-text-muted">{factor.description}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-6">
-        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-golmok-text-muted">
+        <div className="mb-2 flex items-center justify-between text-xs font-semibold text-brand-text-muted">
           <span>서울 평균</span>
           <span>현재 상권</span>
         </div>
-        <div className="relative h-3 rounded-full bg-gradient-to-r from-golmok-risk-low via-golmok-accent to-golmok-risk-high">
+        <div className="relative h-3 rounded-full bg-gradient-to-r from-brand-risk-low via-brand-accent to-brand-risk-high">
           <span className="absolute top-1/2 h-5 w-0.5 -translate-y-1/2 bg-white shadow" style={{ left: "57%" }} />
-          <span className="absolute top-1/2 h-6 w-2 -translate-y-1/2 rounded-full bg-golmok-text-main" style={{ left: `${risk.risk_score}%` }} />
+          <span className="absolute top-1/2 h-6 w-2 -translate-y-1/2 rounded-full bg-brand-text-main" style={{ left: `${risk.risk_score}%` }} />
         </div>
       </div>
     </section>

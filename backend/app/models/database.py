@@ -33,7 +33,7 @@ class CommercialArea(Base, TimestampMixin):
     area_cd: Mapped[str] = mapped_column(String(20), unique=True, index=True)
     area_nm: Mapped[str] = mapped_column(String(100))
     gu_nm: Mapped[str] = mapped_column(String(50), index=True)
-    area_type: Mapped[str] = mapped_column(String(20))  # 골목/전통시장/발달상권/관광특구
+    area_type: Mapped[str] = mapped_column(String(20))  # 지역상권/전통시장/발달상권/관광특구
     geom_lat: Mapped[Optional[float]] = mapped_column(Float)
     geom_lng: Mapped[Optional[float]] = mapped_column(Float)
 

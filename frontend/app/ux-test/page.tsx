@@ -181,11 +181,11 @@ export default function UxTestPage() {
 
   if (isAdmin) {
     return (
-      <main className="min-h-screen bg-golmok-surface px-4 py-8 text-gray-900">
+      <main className="min-h-screen bg-brand-surface px-4 py-8 text-gray-900">
         <div className="mx-auto max-w-6xl">
           <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
             <div>
-              <p className="text-sm font-medium text-golmok-primary">관리자 뷰</p>
+              <p className="text-sm font-medium text-brand-primary">관리자 뷰</p>
               <h1 className="mt-1 text-3xl font-bold">SUS 응답 분석</h1>
               <p className="mt-2 text-sm text-gray-600">
                 이 브라우저의 localStorage에 저장된 사용성 평가 결과입니다.
@@ -195,7 +195,7 @@ export default function UxTestPage() {
               type="button"
               onClick={exportCsv}
               disabled={!responses.length}
-              className="rounded-lg bg-golmok-primary px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
               CSV 내보내기
             </button>
@@ -275,10 +275,10 @@ export default function UxTestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-golmok-surface px-4 py-8 text-gray-900">
+    <main className="min-h-screen bg-brand-surface px-4 py-8 text-gray-900">
       <div className="mx-auto max-w-3xl">
         <section className="mb-6 rounded-lg border border-gray-200 bg-white p-6">
-          <p className="text-sm font-medium text-golmok-primary">System Usability Scale</p>
+          <p className="text-sm font-medium text-brand-primary">System Usability Scale</p>
           <h1 className="mt-2 text-3xl font-bold">상생나침반 사용성 평가 (SUS 설문)</h1>
           <p className="mt-3 text-sm leading-6 text-gray-600">
             서비스를 직접 사용해보신 후 아래 10문항에 응답해주세요.
@@ -286,7 +286,7 @@ export default function UxTestPage() {
           <Link
             href="/"
             target="_blank"
-            className="mt-4 inline-flex rounded-lg bg-golmok-primary px-4 py-2 text-sm font-semibold text-white"
+            className="mt-4 inline-flex rounded-lg bg-brand-primary px-4 py-2 text-sm font-semibold text-white"
           >
             서비스 이용하기 →
           </Link>
@@ -294,7 +294,7 @@ export default function UxTestPage() {
 
         {submitted ? (
           <section className="rounded-lg border border-gray-200 bg-white p-6 text-center">
-            <p className="text-sm font-medium text-golmok-primary">제출 완료</p>
+            <p className="text-sm font-medium text-brand-primary">제출 완료</p>
             <h2 className="mt-2 text-2xl font-bold">
               당신의 사용성 점수: {submitted.susScore}점 ({submitted.grade})
             </h2>
@@ -303,7 +303,7 @@ export default function UxTestPage() {
             </p>
             <div className="mx-auto mt-6 h-3 max-w-md overflow-hidden rounded-full bg-gray-100">
               <div
-                className="h-full rounded-full bg-golmok-primary transition-all"
+                className="h-full rounded-full bg-brand-primary transition-all"
                 style={{ width: `${submitted.susScore}%` }}
               />
             </div>
@@ -341,7 +341,7 @@ export default function UxTestPage() {
               {QUESTIONS.map((question, index) => (
                 <div key={question} className="rounded-lg border border-gray-100 p-4">
                   <div className="mb-3 flex items-start gap-2">
-                    <span className="rounded-md bg-golmok-primary/10 px-2 py-1 text-xs font-bold text-golmok-primary">
+                    <span className="rounded-md bg-brand-primary/10 px-2 py-1 text-xs font-bold text-brand-primary">
                       Q{index + 1}
                     </span>
                     <p className="font-medium">{question}</p>
@@ -355,8 +355,8 @@ export default function UxTestPage() {
                         className={[
                           "h-11 rounded-lg border text-sm font-semibold transition-colors",
                           scores[index] === value
-                            ? "border-golmok-primary bg-golmok-primary text-white"
-                            : "border-gray-200 bg-white text-gray-700 hover:border-golmok-primary",
+                            ? "border-brand-primary bg-brand-primary text-white"
+                            : "border-gray-200 bg-white text-gray-700 hover:border-brand-primary",
                         ].join(" ")}
                       >
                         {value}
@@ -402,7 +402,7 @@ export default function UxTestPage() {
                 onChange={(event) => setComment(event.target.value)}
                 rows={4}
                 placeholder="사용하면서 좋았던 점이나 불편했던 점을 적어주세요."
-                className="mt-2 w-full resize-none rounded-lg border border-gray-200 px-3 py-2 outline-none focus:border-golmok-primary focus:ring-2 focus:ring-golmok-primary/20"
+                className="mt-2 w-full resize-none rounded-lg border border-gray-200 px-3 py-2 outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
               />
             </label>
 
@@ -410,7 +410,7 @@ export default function UxTestPage() {
               type="button"
               onClick={handleSubmit}
               disabled={!canSubmit}
-              className="mt-6 w-full rounded-lg bg-golmok-primary px-4 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
+              className="mt-6 w-full rounded-lg bg-brand-primary px-4 py-3 text-sm font-bold text-white disabled:cursor-not-allowed disabled:bg-gray-300"
             >
               제출하고 결과 보기
             </button>
@@ -430,7 +430,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-5">
       <p className="text-sm text-gray-500">{label}</p>
-      <p className="mt-2 text-3xl font-bold text-golmok-primary">{value}</p>
+      <p className="mt-2 text-3xl font-bold text-brand-primary">{value}</p>
     </div>
   );
 }

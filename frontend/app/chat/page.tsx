@@ -33,8 +33,8 @@ function ContextPanel({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* 서울 공공데이터 배지 */}
-      <div className="rounded-xl border border-golmok-primary/20 bg-golmok-primary/5 p-4">
-        <p className="mb-1 text-xs font-semibold text-golmok-primary">데이터 출처</p>
+      <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4">
+        <p className="mb-1 text-xs font-semibold text-brand-primary">데이터 출처</p>
         <p className="text-xs leading-relaxed text-gray-600">
           서울시 열린데이터광장 공공데이터 기반 · 분기별 업데이트
         </p>
@@ -51,7 +51,7 @@ function ContextPanel({ onClose }: { onClose?: () => void }) {
             { label: "상권 비교", desc: "두 지역 상권 비교" },
           ].map(({ label, desc }) => (
             <li key={label} className="flex items-start gap-2">
-              <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-golmok-primary/60" />
+              <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary/60" />
               <span className="text-xs text-gray-600">
                 <span className="font-medium text-gray-800">{label}</span> — {desc}
               </span>
@@ -85,9 +85,9 @@ function SessionPanel({ firstMessage, onNewChat }: SessionPanelProps) {
         <button
           onClick={onNewChat}
           className={cn(
-            "flex w-full items-center gap-2 rounded-xl border border-golmok-primary/25 px-3 py-2.5",
-            "text-sm font-medium text-golmok-primary",
-            "transition-colors hover:bg-golmok-primary/5",
+            "flex w-full items-center gap-2 rounded-xl border border-brand-primary/25 px-3 py-2.5",
+            "text-sm font-medium text-brand-primary",
+            "transition-colors hover:bg-brand-primary/5",
           )}
         >
           <Plus className="h-4 w-4" />
@@ -100,9 +100,9 @@ function SessionPanel({ firstMessage, onNewChat }: SessionPanelProps) {
           최근 대화
         </p>
         {firstMessage ? (
-          <button className="flex w-full items-center gap-2 rounded-lg bg-golmok-primary/8 px-2 py-2 text-left">
-            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-golmok-primary" />
-            <span className="truncate text-xs font-medium text-golmok-primary">
+          <button className="flex w-full items-center gap-2 rounded-lg bg-brand-primary/8 px-2 py-2 text-left">
+            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-brand-primary" />
+            <span className="truncate text-xs font-medium text-brand-primary">
               {firstMessage}
             </span>
           </button>
@@ -159,10 +159,10 @@ function ChatContent() {
       {/* 중: 채팅 영역 */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-14 shrink-0 items-center border-b border-gray-100 bg-white px-4">
-          <h1 className="text-sm font-semibold text-golmok-text-main">상생나침반 AI 상담</h1>
+          <h1 className="text-sm font-semibold text-brand-text-main">상생나침반 AI 상담</h1>
           {isLoading && (
-            <span className="ml-3 flex items-center gap-1.5 text-xs text-golmok-primary">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-golmok-primary" />
+            <span className="ml-3 flex items-center gap-1.5 text-xs text-brand-primary">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-primary" />
               분석 중...
             </span>
           )}

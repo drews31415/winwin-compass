@@ -26,6 +26,7 @@ DEMO_POLICIES: list[dict[str, Any]] = [
         "apply_end": "2026-11-30",
         "description": "청년 창업자를 위한 저금리 창업자금 대출",
         "source_url": "https://www.sba.seoul.kr",
+        "badges": ["청년", "저금리", "예비창업"],
     },
     {
         "id": "POLICY_002",
@@ -38,6 +39,7 @@ DEMO_POLICIES: list[dict[str, Any]] = [
         "apply_end": "2026-09-30",
         "description": "여성 창업자 전용 사업화 자금 및 멘토링",
         "source_url": "https://www.seoulwomanup.or.kr",
+        "badges": ["여성", "보조금", "멘토링"],
     },
     {
         "id": "POLICY_003",
@@ -50,6 +52,7 @@ DEMO_POLICIES: list[dict[str, Any]] = [
         "apply_end": "2026-12-15",
         "description": "시니어 창업 교육, 상권 진단, 초기 홍보비를 통합 지원",
         "source_url": "https://www.semas.or.kr",
+        "badges": ["시니어", "교육", "홍보"],
     },
     {
         "id": "POLICY_004",
@@ -62,6 +65,7 @@ DEMO_POLICIES: list[dict[str, Any]] = [
         "apply_end": "2026-12-31",
         "description": "임차료, 인테리어, 운영비 부담 완화를 위한 정책자금",
         "source_url": "https://www.sbiz.or.kr",
+        "badges": ["1인 창업자", "경영안정", "저금리"],
     },
     {
         "id": "POLICY_005",
@@ -74,6 +78,7 @@ DEMO_POLICIES: list[dict[str, Any]] = [
         "apply_end": "2026-12-31",
         "description": "창업 초기 대출 접근성을 높이기 위한 신용보증 지원",
         "source_url": "https://www.seoulshinbo.co.kr",
+        "badges": ["1인 창업자", "보증", "고위험 우선"],
     },
 ]
 
@@ -196,9 +201,10 @@ class PolicyRAGEngine:
                         "description": doc.metadata.get("description", ""),
                         "content": doc.page_content,
                         "score": round(float(score), 4),
+                        "badges": [],
                     }
                 )
-            return results
+            return self._rank_policies(results, {})
         except Exception as exc:
             logger.warning("Vector policy search failed, using demo fallback: %s", exc)
             return self._dev_search(query)[:k]
@@ -213,14 +219,14 @@ class PolicyRAGEngine:
         if self._dev_mode:
             for policy in policies:
                 policy["match_reason"] = self._fallback_match_reason(policy, user_profile)
-            return policies
+            return self._rank_policies(policies, user_profile)
 
         for policy in policies:
             try:
                 policy["match_reason"] = await self._explain_match(policy, user_profile)
             except Exception:
                 policy["match_reason"] = self._fallback_match_reason(policy, user_profile)
-        return policies
+        return self._rank_policies(policies, user_profile)
 
     def _build_profile_query(self, profile: dict[str, Any]) -> str:
         parts: list[str] = []
@@ -236,6 +242,10 @@ class PolicyRAGEngine:
             parts.append("청년창업")
         if (age := profile.get("age")) and age >= 50:
             parts.append("시니어 재도전")
+        if user_types := profile.get("user_types"):
+            parts.extend(user_types)
+        if (risk_score := profile.get("risk_score")) and risk_score >= 70:
+            parts.append("긴급 경영안정 저금리 대출 업종전환 지원")
         return " ".join(parts) or "소상공인 창업 지원 정책"
 
     async def _explain_match(self, policy: dict[str, Any], profile: dict[str, Any]) -> str:
@@ -257,6 +267,11 @@ class PolicyRAGEngine:
     def _fallback_match_reason(policy: dict[str, Any], profile: dict[str, Any]) -> str:
         age = profile.get("age")
         business_type = profile.get("business_type") or "창업"
+        area = profile.get("area") or "서울"
+        risk_score = profile.get("risk_score")
+        user_types = ", ".join(profile.get("user_types") or [])
+        if risk_score and risk_score >= 70 and policy.get("category") in {"융자", "보증"}:
+            return f"폐업 위험 {risk_score}점으로 긴급 자금 대응이 우선입니다. {area} {business_type} 조건과 {user_types or '예비창업자'} 상황을 반영해 경영안정 자금으로 검토할 수 있습니다."
         if age and age < 40 and "청년" in policy["program_nm"]:
             return f"만 39세 이하 조건에 맞고, {business_type} 초기 자금으로 활용하기 좋습니다."
         if age and age >= 50 and "시니어" in policy["program_nm"]:
@@ -264,6 +279,24 @@ class PolicyRAGEngine:
         if "여성" in policy["program_nm"]:
             return "여성 예비창업자에게 사업화 자금과 멘토링을 함께 지원하는 정책입니다."
         return "예비창업자의 초기 자금 부담을 줄이는 데 적합한 지원 정책입니다."
+
+    @staticmethod
+    def _rank_policies(policies: list[dict[str, Any]], profile: dict[str, Any]) -> list[dict[str, Any]]:
+        user_types = set(profile.get("user_types") or [])
+        risk_score = profile.get("risk_score") or 0
+
+        def score(policy: dict[str, Any]) -> float:
+            value = float(policy.get("score") or policy.get("match_score") or 0.7)
+            badges = set(policy.get("badges") or [])
+            value += 0.08 * len(user_types & badges)
+            if risk_score >= 70 and (policy.get("category") in {"융자", "보증"} or "경영안정" in badges):
+                value += 0.2
+                policy["priority"] = "폐업 위험 고위험 우선 추천"
+                policy["badges"] = list(badges | {"고위험 우선"})
+            policy["match_score"] = min(0.98, round(value, 3))
+            return value
+
+        return sorted(policies, key=score, reverse=True)
 
     async def seed_sample_policies(self) -> int:
         """Seed demo policy documents into pgvector when OpenAI is configured."""
@@ -357,6 +390,7 @@ class PolicyRAGEngine:
                         "apply_end": str(policy.get("apply_end") or "상시"),
                         "source_url": policy.get("source_url", ""),
                         "description": policy.get("description", ""),
+                        "badges": policy.get("badges", []),
                         "content": (
                             f"{policy['program_nm']}. 대상: {policy.get('target', '')}. "
                             f"지원내용: {policy.get('description', '')}."
@@ -374,6 +408,7 @@ class PolicyRAGEngine:
                 "apply_end": str(policy.get("apply_end") or "상시"),
                 "source_url": policy.get("source_url", ""),
                 "description": policy.get("description", ""),
+                "badges": policy.get("badges", []),
                 "content": policy.get("description", ""),
                 "score": 0.0,
             }

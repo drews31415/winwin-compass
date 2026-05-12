@@ -20,7 +20,7 @@ interface Props {
 function StreamingCursor() {
   return (
     <span
-      className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-golmok-primary align-middle"
+      className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-brand-primary align-middle"
       aria-hidden="true"
     />
   );
@@ -29,7 +29,7 @@ function StreamingCursor() {
 function IntentBadge({ intent }: { intent: string }) {
   const label = INTENT_LABEL[intent] ?? intent;
   return (
-    <span className="mb-1 inline-block rounded-full bg-golmok-primary/10 px-2.5 py-0.5 text-[10px] font-medium text-golmok-primary">
+    <span className="mb-1 inline-block rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-[10px] font-medium text-brand-primary">
       {label}
     </span>
   );
@@ -67,12 +67,12 @@ function AssistantBubble({ message }: { message: Message }) {
                 ol: ({ children }) => <ol className="mb-2 list-decimal pl-4">{children}</ol>,
                 li: ({ children }) => <li className="mb-0.5">{children}</li>,
                 h3: ({ children }) => (
-                  <h3 className="mb-1.5 mt-3 font-semibold text-golmok-text-main first:mt-0">
+                  <h3 className="mb-1.5 mt-3 font-semibold text-brand-text-main first:mt-0">
                     {children}
                   </h3>
                 ),
                 blockquote: ({ children }) => (
-                  <blockquote className="mb-2 border-l-2 border-golmok-primary/40 pl-3 text-sm text-gray-500">
+                  <blockquote className="mb-2 border-l-2 border-brand-primary/40 pl-3 text-sm text-gray-500">
                     {children}
                   </blockquote>
                 ),
@@ -89,7 +89,7 @@ function AssistantBubble({ message }: { message: Message }) {
                   );
                 },
                 strong: ({ children }) => (
-                  <strong className="font-semibold text-golmok-text-main">{children}</strong>
+                  <strong className="font-semibold text-brand-text-main">{children}</strong>
                 ),
               }}
             >

@@ -25,6 +25,8 @@ async def match_policies(
     capital:       int | None = Query(default=None, description="자본금 (만원)"),
     age:           int | None = Query(default=None, description="나이"),
     is_new:        bool       = Query(default=True,  description="예비창업자 여부"),
+    user_types:    str | None = Query(default=None, description="사용자 유형 CSV (청년,여성,시니어,1인 창업자)"),
+    risk_score:    int | None = Query(default=None, description="폐업 위험 점수"),
     db: AsyncSession = Depends(get_db),
 ):
     """사용자 프로필 기반 지원 정책 매칭."""
@@ -35,6 +37,8 @@ async def match_policies(
             "capital":       capital,
             "age":           age,
             "is_new":        is_new,
+            "user_types":     [item.strip() for item in user_types.split(",")] if user_types else None,
+            "risk_score":     risk_score,
         }.items() if v is not None
     }
 

@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.chat_engine import GolmokChatEngine
+from app.ai.chat_engine import WinwinChatEngine
 from app.core.database import get_db
 from app.models.schemas import ChatRequest
 
 router  = APIRouter()
-_engine = GolmokChatEngine()
+_engine = WinwinChatEngine()
 
 
 @router.post("")

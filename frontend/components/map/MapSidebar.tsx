@@ -42,8 +42,8 @@ function ChipGroup({
             className={cn(
               "rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors",
               active
-                ? "border-golmok-primary bg-golmok-primary text-white"
-                : "border-gray-200 bg-white text-gray-600 hover:border-golmok-primary/50 hover:text-golmok-primary",
+                ? "border-brand-primary bg-brand-primary text-white"
+                : "border-gray-200 bg-white text-gray-600 hover:border-brand-primary/50 hover:text-brand-primary",
             )}
           >
             {opt}
@@ -73,11 +73,11 @@ function GuDropdown({
         className={cn(
           "flex w-full items-center justify-between rounded-xl border px-3 py-2 text-sm transition-colors",
           open
-            ? "border-golmok-primary text-golmok-primary"
+            ? "border-brand-primary text-brand-primary"
             : "border-gray-200 text-gray-600 hover:border-gray-300",
         )}
       >
-        <span className={cn("text-xs", selected.length ? "font-medium text-golmok-primary" : "")}>
+        <span className={cn("text-xs", selected.length ? "font-medium text-brand-primary" : "")}>
           {label}
         </span>
         <ChevronDown
@@ -97,11 +97,11 @@ function GuDropdown({
                 className={cn(
                   "h-3.5 w-3.5 shrink-0 rounded border transition-colors",
                   selected.includes(gu)
-                    ? "border-golmok-primary bg-golmok-primary"
+                    ? "border-brand-primary bg-brand-primary"
                     : "border-gray-300",
                 )}
               />
-              <span className={selected.includes(gu) ? "font-medium text-golmok-primary" : "text-gray-700"}>
+              <span className={selected.includes(gu) ? "font-medium text-brand-primary" : "text-gray-700"}>
                 {gu}
               </span>
             </button>
@@ -146,7 +146,7 @@ function AreaList({
             className={cn(
               "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left transition-colors",
               selectedArea?.area_cd === area.area_cd
-                ? "bg-golmok-primary/8 text-golmok-primary"
+                ? "bg-brand-primary/8 text-brand-primary"
                 : "hover:bg-gray-50",
             )}
           >
@@ -204,11 +204,11 @@ export function MapSidebar({
     <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-gray-100 bg-white">
       {/* 헤더 */}
       <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
-        <span className="text-sm font-semibold text-golmok-text-main">상권 필터</span>
+        <span className="text-sm font-semibold text-brand-text-main">상권 필터</span>
         {hasFilters && (
           <button
             onClick={resetFilters}
-            className="flex items-center gap-1 text-[11px] text-golmok-primary hover:underline"
+            className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline"
           >
             <RotateCcw className="h-3 w-3" />
             초기화
@@ -269,7 +269,7 @@ export function MapSidebar({
               placeholder="상권명 또는 자치구"
               className={cn(
                 "w-full rounded-xl border border-gray-200 bg-gray-50 py-2 pl-8 pr-8 text-xs",
-                "placeholder:text-gray-400 focus:border-golmok-primary focus:bg-white focus:outline-none",
+                "placeholder:text-gray-400 focus:border-brand-primary focus:bg-white focus:outline-none",
               )}
             />
             {filters.search && (
@@ -286,7 +286,7 @@ export function MapSidebar({
         {/* 결과 카운트 */}
         <div className="flex items-center justify-between">
           <SectionTitle>검색 결과</SectionTitle>
-          <span className="text-[10px] text-golmok-primary">
+          <span className="text-[10px] text-brand-primary">
             {filteredAreas.length}개
           </span>
         </div>

@@ -114,20 +114,20 @@ export default function MarketingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-golmok-surface px-4 py-8 pb-24 lg:px-10 lg:py-10">
+    <div className="min-h-screen bg-brand-surface px-4 py-8 pb-24 lg:px-10 lg:py-10">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         <header className="space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-semibold text-golmok-primary shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-sm font-semibold text-brand-primary shadow-sm">
             <Megaphone className="h-4 w-4" />
             마케팅 자동화
           </div>
           <div>
-            <h1 className="font-display text-3xl font-black text-golmok-text-main sm:text-4xl">
+            <h1 className="font-display text-3xl font-black text-brand-text-main sm:text-4xl">
               위험 진단 이후 바로 쓸 홍보 문구 만들기
             </h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-golmok-text-muted">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-brand-text-muted">
               폐업 위험 요인과 매장 상황을 바탕으로 SNS, 리뷰 답변, 전단, 메뉴 소개 문구를 생성합니다.
               현재는 텍스트 실행 지원 기능이며, 이미지 보정과 홍보 이미지 생성은 확장 기능입니다.
             </p>
@@ -135,10 +135,10 @@ export default function MarketingPage() {
         </header>
 
         <section className="grid gap-5 xl:grid-cols-[0.9fr_1.1fr]">
-          <form onSubmit={handleSubmit} className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
+          <form onSubmit={handleSubmit} className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
             <div className="mb-5 flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-golmok-primary" />
-              <h2 className="text-xl font-black text-golmok-text-main">생성 조건</h2>
+              <Sparkles className="h-5 w-5 text-brand-primary" />
+              <h2 className="text-xl font-black text-brand-text-main">생성 조건</h2>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -190,25 +190,25 @@ export default function MarketingPage() {
                 <Input value={form.menu_items} onChange={(event) => updateForm("menu_items", event.target.value)} />
               </Field>
               <label className="block space-y-2">
-                <span className="text-sm font-semibold text-golmok-text-main">추가 상황</span>
+                <span className="text-sm font-semibold text-brand-text-main">추가 상황</span>
                 <textarea
                   value={form.extra_context}
                   onChange={(event) => updateForm("extra_context", event.target.value)}
                   rows={4}
-                  className="w-full resize-none rounded-md border border-input bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-golmok-primary/30"
+                  className="w-full resize-none rounded-md border border-input bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-primary/30"
                 />
               </label>
             </div>
 
-            <Button disabled={isLoading} className="mt-5 h-11 w-full bg-golmok-primary hover:bg-golmok-primary-dark">
+            <Button disabled={isLoading} className="mt-5 h-11 w-full bg-brand-primary hover:bg-brand-primary-dark">
               {isLoading ? "생성 중..." : "마케팅 문구 생성"}
             </Button>
           </form>
 
           <section className="space-y-4">
-            <div className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
-              <h2 className="text-xl font-black text-golmok-text-main">생성 결과</h2>
-              <p className="mt-2 text-sm text-golmok-text-muted">
+            <div className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
+              <h2 className="text-xl font-black text-brand-text-main">생성 결과</h2>
+              <p className="mt-2 text-sm text-brand-text-muted">
                 생성된 문구는 실제 매장명, 가격, 운영시간을 확인한 뒤 게시하세요.
               </p>
             </div>
@@ -225,13 +225,13 @@ export default function MarketingPage() {
                     <article key={`${item.title}-${index}`} className="rounded-lg border border-gray-100 bg-white p-5 shadow-card">
                       <div className="mb-3 flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-xs font-semibold uppercase text-golmok-primary">{item.channel}</p>
-                          <h3 className="mt-1 text-lg font-black text-golmok-text-main">{item.title}</h3>
+                          <p className="text-xs font-semibold uppercase text-brand-primary">{item.channel}</p>
+                          <h3 className="mt-1 text-lg font-black text-brand-text-main">{item.title}</h3>
                         </div>
                         <button
                           type="button"
                           onClick={() => copyText(item.content)}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-golmok-primary hover:text-golmok-primary"
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:border-brand-primary hover:text-brand-primary"
                           aria-label="복사"
                         >
                           <Clipboard className="h-4 w-4" />
@@ -240,16 +240,16 @@ export default function MarketingPage() {
                       <p className="whitespace-pre-line rounded-md bg-gray-50 p-4 text-sm leading-7 text-gray-800">
                         {item.content}
                       </p>
-                      <p className="mt-3 text-xs leading-5 text-golmok-text-muted">{item.usage_tip}</p>
+                      <p className="mt-3 text-xs leading-5 text-brand-text-muted">{item.usage_tip}</p>
                     </article>
                   ))}
                 </div>
-                <div className="rounded-lg border border-golmok-primary/10 bg-white p-5 shadow-card">
-                  <h3 className="mb-3 text-base font-black text-golmok-text-main">실행 체크리스트</h3>
+                <div className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
+                  <h3 className="mb-3 text-base font-black text-brand-text-main">실행 체크리스트</h3>
                   <ul className="space-y-2">
                     {result.action_checklist.map((item) => (
                       <li key={item} className="flex gap-2 text-sm text-gray-700">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-golmok-primary" />
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -257,7 +257,7 @@ export default function MarketingPage() {
                 </div>
               </>
             ) : (
-              <div className="rounded-lg border border-dashed border-gray-200 bg-white p-10 text-center text-sm text-golmok-text-muted">
+              <div className="rounded-lg border border-dashed border-gray-200 bg-white p-10 text-center text-sm text-brand-text-muted">
                 생성 조건을 확인한 뒤 마케팅 문구를 만들어보세요.
               </div>
             )}
@@ -271,7 +271,7 @@ export default function MarketingPage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-2">
-      <span className="text-sm font-semibold text-golmok-text-main">{label}</span>
+      <span className="text-sm font-semibold text-brand-text-main">{label}</span>
       {children}
     </label>
   );

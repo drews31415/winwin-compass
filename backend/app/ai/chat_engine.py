@@ -1,5 +1,5 @@
 """
-GolmokChatEngine — 전체 대화 흐름 관리.
+WinwinChatEngine — 전체 대화 흐름 관리.
 
 흐름:
   1. Redis에서 대화 이력 로드 (최근 10턴)
@@ -66,9 +66,9 @@ class ConversationBufferWindowMemory:
         self.return_messages = return_messages
 
 
-# ── GolmokChatEngine ───────────────────────────────────────────────────────────
+# ── WinwinChatEngine ───────────────────────────────────────────────────────────
 
-class GolmokChatEngine:
+class WinwinChatEngine:
     """사용자 메시지 → 의도 분류 → 데이터 수집 → gpt-4o 스트리밍 응답."""
 
     def __init__(self) -> None:
@@ -772,4 +772,4 @@ class GolmokChatEngine:
 
 
 # ── 하위 호환 alias ───────────────────────────────────────────────────────────
-ChatEngine = GolmokChatEngine
+ChatEngine = WinwinChatEngine

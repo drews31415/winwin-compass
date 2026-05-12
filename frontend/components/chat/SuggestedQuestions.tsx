@@ -19,15 +19,15 @@ export function SuggestedQuestions({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center gap-6 py-8">
       {/* 아이콘 */}
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-golmok-primary/10">
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10">
         <span className="text-3xl" role="img" aria-label="compass">🧭</span>
       </div>
 
       <div className="text-center">
-        <h2 className="text-lg font-semibold text-golmok-text-main">
+        <h2 className="text-lg font-semibold text-brand-text-main">
           상생나침반 AI에게 물어보세요
         </h2>
-        <p className="mt-1 text-sm text-golmok-text-muted">
+        <p className="mt-1 text-sm text-brand-text-muted">
           서울 상권 분석, 지원금 탐색, 창업 상담을 도와드립니다
         </p>
       </div>
@@ -40,7 +40,7 @@ export function SuggestedQuestions({ onSelect }: Props) {
             className={cn(
               "rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-sm text-gray-700",
               "shadow-sm transition-all duration-150",
-              "hover:border-golmok-primary hover:text-golmok-primary hover:shadow-card",
+              "hover:border-brand-primary hover:text-brand-primary hover:shadow-card",
             )}
           >
             {q}

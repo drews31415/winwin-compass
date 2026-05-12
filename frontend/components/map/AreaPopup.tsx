@@ -60,13 +60,13 @@ export function AreaPopup({ area, onClose, compact = false }: Props) {
       {/* 헤더 */}
       <div className="mb-3 flex items-start justify-between gap-2">
         <div>
-          <div className="flex items-center gap-1.5 text-[11px] text-golmok-text-muted">
+          <div className="flex items-center gap-1.5 text-[11px] text-brand-text-muted">
             <span>📍</span>
             <span>{area.gu_nm}</span>
             <span>·</span>
             <span>{area.area_type}</span>
           </div>
-          <h3 className="mt-0.5 font-semibold text-golmok-text-main">{area.area_nm}</h3>
+          <h3 className="mt-0.5 font-semibold text-brand-text-main">{area.area_nm}</h3>
         </div>
         {onClose && (
           <button
@@ -100,8 +100,8 @@ export function AreaPopup({ area, onClose, compact = false }: Props) {
           <Link
             href={`/report?area=${area.area_cd}`}
             className={cn(
-              "flex-1 rounded-xl bg-golmok-primary py-2 text-center text-xs font-medium text-white",
-              "transition-colors hover:bg-golmok-primary-dark",
+              "flex-1 rounded-xl bg-brand-primary py-2 text-center text-xs font-medium text-white",
+              "transition-colors hover:bg-brand-primary-dark",
             )}
           >
             상세 리포트
@@ -109,8 +109,8 @@ export function AreaPopup({ area, onClose, compact = false }: Props) {
           <Link
             href={`/chat?q=${encodeURIComponent(`${area.area_nm} 상권 분석해줘`)}`}
             className={cn(
-              "flex-1 rounded-xl border border-golmok-primary py-2 text-center text-xs font-medium text-golmok-primary",
-              "transition-colors hover:bg-golmok-primary/5",
+              "flex-1 rounded-xl border border-brand-primary py-2 text-center text-xs font-medium text-brand-primary",
+              "transition-colors hover:bg-brand-primary/5",
             )}
           >
             AI에게 물어보기

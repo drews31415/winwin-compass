@@ -35,15 +35,15 @@
     --radius:       0.625rem;
 
     /* 브랜드 CSS 변수 */
-    --golmok-primary:       #2D6A4F;
-    --golmok-primary-light: #52B788;
-    --golmok-primary-dark:  #1B4332;
-    --golmok-accent:        #F4A261;
-    --golmok-accent-light:  #FFDDD2;
-    --golmok-surface:       #F8F7F2;
-    --golmok-risk-low:      #52B788;
-    --golmok-risk-mid:      #F4A261;
-    --golmok-risk-high:     #E63946;
+    --brand-primary:       #2D6A4F;
+    --brand-primary-light: #52B788;
+    --brand-primary-dark:  #1B4332;
+    --brand-accent:        #F4A261;
+    --brand-accent-light:  #FFDDD2;
+    --brand-surface:       #F8F7F2;
+    --brand-risk-low:      #52B788;
+    --brand-risk-mid:      #F4A261;
+    --brand-risk-high:     #E63946;
 
     /* 사이드바 */
     --sidebar-width: 15rem; /* 240px */
@@ -84,6 +84,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  html.digital-care-mode {
+    font-size: 18px;
+  }
+
+  html.digital-care-mode button,
+  html.digital-care-mode input,
+  html.digital-care-mode select,
+  html.digital-care-mode textarea {
+    min-height: 48px;
+  }
 }
 
 /* ── 스크롤바 ────────────────────────────────────────────────────────────── */
@@ -112,7 +123,7 @@
 
   /* 사용자 말풍선 */
   .chat-bubble-user {
-    @apply chat-bubble rounded-2xl rounded-br-sm bg-golmok-primary text-white px-4 py-2.5 text-sm leading-relaxed;
+    @apply chat-bubble rounded-2xl rounded-br-sm bg-brand-primary text-white px-4 py-2.5 text-sm leading-relaxed;
   }
 
   /* AI 말풍선 */
@@ -138,17 +149,17 @@
   /* 사이드바 내비 링크 */
   .nav-link {
     @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150
-           text-gray-600 hover:bg-gray-50 hover:text-golmok-primary;
+           text-gray-600 hover:bg-gray-50 hover:text-brand-primary;
   }
   .nav-link-active {
-    @apply bg-golmok-primary text-white hover:bg-golmok-primary hover:text-white;
+    @apply bg-brand-primary text-white hover:bg-brand-primary hover:text-white;
   }
 
   /* 폼 인풋 기본 스타일 */
   .input-base {
     @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800
            placeholder:text-gray-400 transition-all
-           focus:border-golmok-primary focus:outline-none focus:ring-2 focus:ring-golmok-primary/20;
+           focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20;
   }
 }
 
@@ -160,11 +171,23 @@
 
   /* 텍스트 그라데이션 */
   .text-gradient {
-    @apply bg-gradient-to-r from-golmok-primary to-golmok-primary-light bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-primary to-brand-primary-light bg-clip-text text-transparent;
   }
 
   /* 사이드바 오프셋 — 데스크톱에서 콘텐츠 영역이 사이드바를 피함 */
   .content-offset {
     @apply lg:ml-[var(--sidebar-width)];
+  }
+
+  .care-mode-summary {
+    display: none;
+  }
+
+  html.digital-care-mode .care-mode-summary {
+    display: block;
+  }
+
+  html.digital-care-mode .care-mode-detail {
+    display: none;
   }
 }

@@ -55,7 +55,7 @@ _SCHEMA_STRING = """테이블: commercial_areas
 - area_cd: 상권코드 (예: 3110016)
 - area_nm: 상권명 (예: 종로3가)
 - gu_nm: 자치구 (예: 종로구)
-- area_type: 상권유형 (골목상권/전통시장/발달상권/관광특구)
+- area_type: 상권유형 (지역상권/전통시장/발달상권/관광특구)
 - geom_lat: 위도
 - geom_lng: 경도
 

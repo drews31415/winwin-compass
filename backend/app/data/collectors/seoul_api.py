@@ -45,8 +45,8 @@ def _quarter(row: dict) -> str:
 
 _DUMMY_AREAS = [
     {
-        "TRDAR_CD": "DEV001", "TRDAR_CD_NM": "테스트골목상권",
-        "TRDAR_SE_CD_NM": "골목상권",
+        "TRDAR_CD": "DEV001", "TRDAR_CD_NM": "테스트지역상권",
+        "TRDAR_SE_CD_NM": "지역상권",
         "X_COORDINATE": "126.9784", "Y_COORDINATE": "37.5665",
         "SIGNGU_CD_NM": "중구",
     },
@@ -60,7 +60,7 @@ _DUMMY_AREAS = [
 
 _DUMMY_SALES_ROW = {
     "STDR_YY_CD": "2024", "STDR_QU_CD": "3",
-    "TRDAR_CD": "DEV001", "TRDAR_CD_NM": "테스트골목상권",
+    "TRDAR_CD": "DEV001", "TRDAR_CD_NM": "테스트지역상권",
     "SVC_INDUTY_CD": "CS100001", "SVC_INDUTY_CD_NM": "한식음식점",
     "MDWK_SELNG_AMT": "15000000", "WKND_SELNG_AMT": "8000000",
     "TMZ_CD_01": "500000",  "TMZ_CD_02": "2000000",
@@ -122,7 +122,7 @@ class SeoulOpenAPI(BaseCollector):
 
     async def get_all_commercial_areas(self) -> list[dict]:
         """
-        골목·전통시장·발달상권·관광특구 전체 상권 목록.
+        지역상권·전통시장·발달상권·관광특구 전체 상권 목록.
         서비스: trdarRtarGetList
         """
         if self._dev_mode:

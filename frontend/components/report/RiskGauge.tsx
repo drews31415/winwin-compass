@@ -80,7 +80,7 @@ export function RiskGauge({ score, className }: RiskGaugeProps) {
           <p className="text-4xl font-black" style={{ color: riskColor(target) }}>
             {displayScore}
           </p>
-          <p className="text-sm font-semibold text-golmok-text-muted">위험도 {riskLabel(target)}</p>
+          <p className="text-sm font-semibold text-brand-text-muted">위험도 {riskLabel(target)}</p>
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@
 ## Production Environment
 
 - `NEXT_PUBLIC_API_URL=https://winwin-compass-production.up.railway.app`
-- `CORS_ORIGINS=http://localhost:3000,https://winwin-compass.vercel.app,https://golmok-compass.vercel.app`
+- `CORS_ORIGINS=http://localhost:3000,https://winwin-compass.vercel.app`
 
 ## Smoke Test Commands
 

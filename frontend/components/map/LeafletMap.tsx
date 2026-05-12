@@ -60,7 +60,7 @@ export default function LeafletMap({ areas, selectedArea, onSelectArea }: Props)
           }}
           eventHandlers={{ click: () => onSelectArea(area) }}
         >
-          <Popup maxWidth={280} className="golmok-popup">
+          <Popup maxWidth={280} className="brand-popup">
             <AreaPopup area={area} />
           </Popup>
         </CircleMarker>

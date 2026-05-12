@@ -13,7 +13,7 @@ export interface Message {
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-const SESSION_KEY = "golmok_session_id";
+const SESSION_KEY = "winwin_session_id";
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);

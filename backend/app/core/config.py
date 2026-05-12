@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     SEOUL_API_KEY: Optional[str] = None
 
     # Database
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost:5432/golmok"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost:5432/winwin"
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379"
