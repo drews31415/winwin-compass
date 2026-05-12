@@ -1,4 +1,4 @@
-import asyncio
+﻿import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 async def _seed_rag() -> None:
-    """RAG 정책 샘플 데이터 초기 적재 (OPENAI_API_KEY 없으면 자동 스킵)."""
+    """RAG ?뺤콉 ?섑뵆 ?곗씠??珥덇린 ?곸옱 (OPENAI_API_KEY ?놁쑝硫??먮룞 ?ㅽ궢)."""
     try:
         from app.ai.rag_engine import PolicyRAGEngine
         count = await PolicyRAGEngine().seed_sample_policies()
@@ -59,7 +59,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="골목 나침반 API",
+    title="怨⑤ぉ ?섏묠諛?API",
     version="0.2.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -74,7 +74,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ── 라우터 등록 ────────────────────────────────────────────────────────────────
+# ?? ?쇱슦???깅줉 ????????????????????????????????????????????????????????????????
+@app.get("/api/v1/areas/{area_cd}", tags=["data"])
+async def demo_area_detail(area_cd: str):
+    samples = {
+        "3110016": {"name": "\uc885\ub85c3\uac00", "gu": "\uc885\ub85c\uad6c", "type": "\uace8\ubaa9\uc0c1\uad8c", "lat": 37.5704, "lng": 126.9911, "sales": 238_000_000, "stores": 154, "open": 11.6, "close": 13.2, "ages": [5366, 31303, 25043, 17888, 7155, 2683]},
+        "2640014": {"name": "\ud64d\ub300\uc785\uad6c", "gu": "\ub9c8\ud3ec\uad6c", "type": "\ubc1c\ub2ec\uc0c1\uad8c", "lat": 37.5563, "lng": 126.9236, "sales": 374_000_000, "stores": 304, "open": 17.7, "close": 17.4, "ages": [13312, 69222, 30617, 10649, 6656, 2662]},
+        "3920008": {"name": "\ubd88\uad11\ub3d9", "gu": "\uc740\ud3c9\uad6c", "type": "\uace8\ubaa9\uc0c1\uad8c", "lat": 37.6105, "lng": 126.9292, "sales": 120_000_000, "stores": 90, "open": 9.8, "close": 9.4, "ages": [5324, 9318, 11980, 14643, 15309, 9984]},
+    }
+    sample = samples.get(area_cd, samples["3110016"])
+    ages = sample["ages"]
+    return {
+        "area": {"area_cd": area_cd, "area_nm": sample["name"], "gu_nm": sample["gu"], "area_type": sample["type"], "geom_lat": sample["lat"], "geom_lng": sample["lng"]},
+        "latest_quarter": "2026Q1",
+        "sales": [{"area_cd": area_cd, "industry_cd": "CS100010", "industry_nm": "\ucee4\ud53c-\uc74c\ub8cc", "year_quarter": "2026Q1", "monthly_sales_avg": sample["sales"], "daily_sales_avg": int(sample["sales"] / 30), "weekday_sales": int(sample["sales"] * 0.62), "weekend_sales": int(sample["sales"] * 0.38), "time_slot_sales": {"06": int(sample["sales"] * 0.04), "09": int(sample["sales"] * 0.08), "12": int(sample["sales"] * 0.22), "14": int(sample["sales"] * 0.17), "18": int(sample["sales"] * 0.20), "20": int(sample["sales"] * 0.18), "21": int(sample["sales"] * 0.11)}}],
+        "stores": [{"area_cd": area_cd, "year_quarter": "2026Q1", "industry_cd": "CS100010", "store_count": sample["stores"], "open_rate": sample["open"], "close_rate": sample["close"]}],
+        "population": {"area_cd": area_cd, "year_quarter": "2026Q1", "total_population": sum(ages), "age_10s": ages[0], "age_20s": ages[1], "age_30s": ages[2], "age_40s": ages[3], "age_50s": ages[4], "age_60s": ages[5], "male_ratio": 0.48, "female_ratio": 0.52},
+    }
+
 app.include_router(health.router,       tags=["health"])
 app.include_router(v1_chat.router,      prefix="/api/v1/chat",   tags=["chat"])
 app.include_router(v1_report.router,    prefix="/api/v1/report", tags=["report"])
@@ -85,4 +102,4 @@ app.include_router(data_routes.router,  prefix="/api/v1",        tags=["data"])
 
 @app.get("/")
 async def root():
-    return {"message": "골목 나침반 API", "version": "0.2.0"}
+    return {"message": "怨⑤ぉ ?섏묠諛?API", "version": "0.2.0"}
