@@ -4,7 +4,7 @@
 
 ## URLs
 
-- Frontend: https://golmok-compass.vercel.app
+- Frontend: https://winwin-compass.vercel.app
 - Backend: https://winwin-compass-production.up.railway.app
 - API Docs: https://winwin-compass-production.up.railway.app/docs
 - Health Check: https://winwin-compass-production.up.railway.app/health
@@ -12,14 +12,14 @@
 
 ## Services
 
-- Vercel project: `golmok-compass` (legacy slug)
+- Vercel project: `winwin-compass`
 - Railway project: `winwin-compass`
 - Railway service: `winwin-compass`
 
 ## Production Environment
 
 - `NEXT_PUBLIC_API_URL=https://winwin-compass-production.up.railway.app`
-- `CORS_ORIGINS=http://localhost:3000,https://golmok-compass.vercel.app`
+- `CORS_ORIGINS=http://localhost:3000,https://winwin-compass.vercel.app,https://golmok-compass.vercel.app`
 
 ## Smoke Test Commands
 
@@ -27,5 +27,5 @@
 curl https://winwin-compass-production.up.railway.app/health
 curl https://winwin-compass-production.up.railway.app/api/v1/report/3110016
 curl "https://winwin-compass-production.up.railway.app/api/v1/ml/forecast/3110016?periods=4"
-curl https://golmok-compass.vercel.app
+curl https://winwin-compass.vercel.app
 ```

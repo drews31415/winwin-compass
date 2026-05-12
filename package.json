@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "demo:local": "node scripts/record_demo.js",
-    "demo:record": "node scripts/record_demo.js --url=https://golmok-compass.vercel.app"
+    "demo:record": "node scripts/record_demo.js --url=https://winwin-compass.vercel.app"
   },
   "devDependencies": {
     "playwright": "^1.60.0"

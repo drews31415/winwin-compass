@@ -20,7 +20,7 @@ const BASE_URL =
   getArgValue("url") ||
   process.env.DEMO_URL ||
   (process.argv.includes("--prod")
-    ? "https://golmok-compass.vercel.app"
+    ? "https://winwin-compass.vercel.app"
     : "http://localhost:3000");
 
 const API_URL = process.env.API_URL || "http://localhost:8000";

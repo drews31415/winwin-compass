@@ -4,7 +4,7 @@
 
 ## 배포 URL
 
-- 서비스: https://golmok-compass.vercel.app
+- 서비스: https://winwin-compass.vercel.app
 - API 문서: https://winwin-compass-production.up.railway.app/docs
 - API 헬스체크: https://winwin-compass-production.up.railway.app/health
 

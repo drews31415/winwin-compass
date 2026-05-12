@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const baseUrl = "https://golmok-compass.vercel.app";
+const baseUrl = "https://winwin-compass.vercel.app";
 const paths = ["/", "/chat", "/map", "/report", "/policy"];
 
 for (const path of paths) {
