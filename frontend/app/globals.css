@@ -1,0 +1,170 @@
+/* ── 웹폰트 ──────────────────────────────────────────────────────────────── */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
+@import url("https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css");
+
+/* ── 지도 라이브러리 ─────────────────────────────────────────────────────── */
+@import "mapbox-gl/dist/mapbox-gl.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS 변수 ────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* shadcn/ui 기본 토큰 */
+    --background:   44 33% 97%;      /* #F8F7F2 크림 */
+    --foreground:   0 0% 10%;        /* #1A1A1A */
+    --card:         0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover:      0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary:      152 40% 30%;     /* #2D6A4F */
+    --primary-foreground: 0 0% 98%;
+    --secondary:    152 36% 52%;     /* #52B788 */
+    --secondary-foreground: 0 0% 10%;
+    --muted:        210 16% 94%;
+    --muted-foreground: 220 9% 46%;  /* #6B7280 */
+    --accent:       27 87% 67%;      /* #F4A261 */
+    --accent-foreground: 0 0% 10%;
+    --destructive:  358 74% 57%;     /* #E63946 */
+    --destructive-foreground: 0 0% 98%;
+    --border:       214 20% 91%;
+    --input:        214 20% 91%;
+    --ring:         152 40% 30%;
+    --radius:       0.625rem;
+
+    /* 브랜드 CSS 변수 */
+    --golmok-primary:       #2D6A4F;
+    --golmok-primary-light: #52B788;
+    --golmok-primary-dark:  #1B4332;
+    --golmok-accent:        #F4A261;
+    --golmok-accent-light:  #FFDDD2;
+    --golmok-surface:       #F8F7F2;
+    --golmok-risk-low:      #52B788;
+    --golmok-risk-mid:      #F4A261;
+    --golmok-risk-high:     #E63946;
+
+    /* 사이드바 */
+    --sidebar-width: 15rem; /* 240px */
+  }
+
+  .dark {
+    --background:   222 47% 9%;
+    --foreground:   210 40% 98%;
+    --card:         222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover:      222 47% 9%;
+    --popover-foreground: 210 40% 98%;
+    --primary:      152 40% 52%;
+    --primary-foreground: 0 0% 10%;
+    --secondary:    217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+    --muted:        217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+    --accent:       27 87% 60%;
+    --accent-foreground: 0 0% 10%;
+    --destructive:  358 62% 40%;
+    --destructive-foreground: 210 40% 98%;
+    --border:       217 33% 18%;
+    --input:        217 33% 18%;
+    --ring:         152 40% 52%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ── 스크롤바 ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #52B788;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2D6A4F;
+}
+
+/* ── 컴포넌트 레이어 ─────────────────────────────────────────────────────── */
+@layer components {
+
+  /* 채팅 말풍선 진입 애니메이션 */
+  .chat-bubble {
+    @apply animate-bubble-in;
+  }
+
+  /* 사용자 말풍선 */
+  .chat-bubble-user {
+    @apply chat-bubble rounded-2xl rounded-br-sm bg-golmok-primary text-white px-4 py-2.5 text-sm leading-relaxed;
+  }
+
+  /* AI 말풍선 */
+  .chat-bubble-ai {
+    @apply chat-bubble rounded-2xl rounded-bl-sm bg-white border border-gray-100 shadow-sm px-4 py-2.5 text-sm leading-relaxed text-gray-800;
+  }
+
+  /* 카드 호버 */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* 스켈레톤 로딩 */
+  .skeleton {
+    @apply animate-shimmer rounded-md bg-gradient-to-r from-gray-100 via-white to-gray-100 bg-[length:200%_100%];
+  }
+
+  /* 위험도 배지 */
+  .risk-badge-low  { @apply inline-flex items-center gap-1 rounded-full bg-[#52B788]/15 px-2.5 py-0.5 text-xs font-medium text-[#2D6A4F]; }
+  .risk-badge-mid  { @apply inline-flex items-center gap-1 rounded-full bg-[#F4A261]/15 px-2.5 py-0.5 text-xs font-medium text-[#c97a3a]; }
+  .risk-badge-high { @apply inline-flex items-center gap-1 rounded-full bg-[#E63946]/15 px-2.5 py-0.5 text-xs font-medium text-[#E63946]; }
+
+  /* 사이드바 내비 링크 */
+  .nav-link {
+    @apply flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150
+           text-gray-600 hover:bg-gray-50 hover:text-golmok-primary;
+  }
+  .nav-link-active {
+    @apply bg-golmok-primary text-white hover:bg-golmok-primary hover:text-white;
+  }
+
+  /* 폼 인풋 기본 스타일 */
+  .input-base {
+    @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800
+           placeholder:text-gray-400 transition-all
+           focus:border-golmok-primary focus:outline-none focus:ring-2 focus:ring-golmok-primary/20;
+  }
+}
+
+/* ── 유틸리티 레이어 ─────────────────────────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: "Gmarket Sans", "Pretendard", system-ui, sans-serif;
+  }
+
+  /* 텍스트 그라데이션 */
+  .text-gradient {
+    @apply bg-gradient-to-r from-golmok-primary to-golmok-primary-light bg-clip-text text-transparent;
+  }
+
+  /* 사이드바 오프셋 — 데스크톱에서 콘텐츠 영역이 사이드바를 피함 */
+  .content-offset {
+    @apply lg:ml-[var(--sidebar-width)];
+  }
+}

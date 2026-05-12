@@ -1,0 +1,16 @@
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.*
+models/*.pkl
+models/*_meta.json
+.pytest_cache/
+tests/
+*.log
+.git/
+.gitignore
