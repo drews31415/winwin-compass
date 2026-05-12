@@ -39,7 +39,7 @@ export function Sidebar() {
             <Compass className="h-4 w-4 text-white" />
           </span>
           <span className="font-display text-base font-bold tracking-tight text-golmok-primary">
-            골목 나침반
+            상생나침반
           </span>
         </Link>
       </div>
@@ -65,7 +65,7 @@ export function Sidebar() {
       {/* 하단 정보 */}
       <div className="shrink-0 border-t border-gray-100 px-5 py-4">
         <p className="text-[11px] leading-relaxed text-gray-400">
-          골목 나침반 v0.2
+          상생나침반 v0.2
           <br />
           서울 소상공인 AI 분석 플랫폼
         </p>

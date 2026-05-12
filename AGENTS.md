@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This repository is a monorepo for Golmok Compass.
+This repository is a monorepo for 상생나침반.
 
 - `frontend/`: Next.js App Router frontend. Pages live in `app/`, shared UI in `components/`, API helpers and hooks in `lib/`, static assets in `public/`.
 - `backend/`: FastAPI backend. Main app entry is `app/main.py`; API routes are under `app/api/`; settings and database setup are in `app/core/`; SQLAlchemy models and schemas are in `app/models/`; AI logic is in `app/ai/`; data collectors/processors are in `app/data/`.
@@ -55,7 +55,7 @@ Use TypeScript for frontend code and Python 3.11+ for backend code. Prefer 2-spa
 
 Use Tailwind utility classes and existing shadcn-style components in `frontend/components/ui/`. Keep API response types explicit in frontend files when consuming backend endpoints.
 
-Follow the existing Golmok design tokens in `tailwind.config.ts`: primary `#2D6A4F`, accent `#F4A261`, surface `#F8F7F2`, and risk colors `risk-low`, `risk-mid`, `risk-high`.
+Follow the existing 상생나침반 design tokens in `tailwind.config.ts`: primary `#2D6A4F`, accent `#F4A261`, surface `#F8F7F2`, and risk colors `risk-low`, `risk-mid`, `risk-high`.
 
 ## Testing Guidelines
 

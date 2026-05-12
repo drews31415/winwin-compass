@@ -7,7 +7,7 @@ if command -v curl.exe >/dev/null 2>&1; then
   CURL_BIN="curl.exe"
 fi
 
-echo "=== 골목 컴퍼스 스모크 테스트 ==="
+echo "=== Winwin Compass smoke test ==="
 echo "BASE_URL=${BASE_URL}"
 
 json_pretty() {
@@ -23,34 +23,31 @@ json_pretty() {
 }
 
 echo
-echo "[1] 헬스체크"
+echo "[1] Health"
 "${CURL_BIN}" -s "${BASE_URL}/health" | json_pretty
 
 echo
-echo "[2] 상권 리포트 데이터 (종로3가)"
+echo "[2] Area detail: 3110016"
 "${CURL_BIN}" -s "${BASE_URL}/api/v1/areas/3110016" | json_pretty
 
 echo
-echo "[3] ML 위험 점수"
+echo "[3] ML risk"
 "${CURL_BIN}" -s "${BASE_URL}/api/v1/ml/risk/3110016" | json_pretty
 
 echo
-echo "[4] ML 예측"
+echo "[4] ML forecast"
 "${CURL_BIN}" -s "${BASE_URL}/api/v1/ml/forecast/3110016?periods=4" | json_pretty
 
 echo
-echo "[5] 정책 매칭"
-"${CURL_BIN}" -sG "${BASE_URL}/api/v1/policy/match" \
-  --data-urlencode "business_type=카페" \
-  --data-urlencode "capital=5000" \
-  | json_pretty
+echo "[5] Policy match"
+"${CURL_BIN}" -s "${BASE_URL}/api/v1/policy/match?business_type=%EC%B9%B4%ED%8E%98&capital=5000" | json_pretty
 
 echo
-echo "[6] AI 채팅 simple"
+echo "[6] Chat simple"
 "${CURL_BIN}" -s -X POST "${BASE_URL}/api/v1/chat/simple" \
-  -H "Content-Type: application/json" \
-  -d '{"message":"종로3가 카페 창업 어때?","session_id":"smoke-test","user_context":{}}' \
+  -H "Content-Type: application/json; charset=utf-8" \
+  -d '{"message":"\uc885\ub85c3\uac00 \uce74\ud398 \ucc3d\uc5c5 \uc5b4\ub54c?","session_id":"smoke-test","user_context":{}}' \
   | json_pretty
 
 echo
-echo "=== 테스트 완료 ==="
+echo "=== Smoke test complete ==="

@@ -174,7 +174,7 @@ export default function UxTestPage() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "golmok-compass-sus-responses.csv";
+    anchor.download = "winwin-compass-sus-responses.csv";
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -279,7 +279,7 @@ export default function UxTestPage() {
       <div className="mx-auto max-w-3xl">
         <section className="mb-6 rounded-lg border border-gray-200 bg-white p-6">
           <p className="text-sm font-medium text-golmok-primary">System Usability Scale</p>
-          <h1 className="mt-2 text-3xl font-bold">골목 컴퍼스 사용성 평가 (SUS 설문)</h1>
+          <h1 className="mt-2 text-3xl font-bold">상생나침반 사용성 평가 (SUS 설문)</h1>
           <p className="mt-3 text-sm leading-6 text-gray-600">
             서비스를 직접 사용해보신 후 아래 10문항에 응답해주세요.
           </p>

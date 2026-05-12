@@ -1,4 +1,4 @@
-# Deployment
+# 상생나침반 Deployment
 
 배포 완료: 2026-05-13
 
@@ -8,11 +8,11 @@
 - Backend: https://winwin-compass-production.up.railway.app
 - API Docs: https://winwin-compass-production.up.railway.app/docs
 - Health Check: https://winwin-compass-production.up.railway.app/health
-- GitHub: https://github.com/your-id/golmok-compass
+- GitHub: https://github.com/drews31415/winwin-compass
 
 ## Services
 
-- Vercel project: `golmok-compass`
+- Vercel project: `golmok-compass` (legacy slug)
 - Railway project: `winwin-compass`
 - Railway service: `winwin-compass`
 

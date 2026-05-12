@@ -5,7 +5,7 @@ import { StatsCounter } from "@/components/ui/StatsCounter";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "골목 나침반 — 내 상권, 데이터로 보다",
+  title: "상생나침반 — 내 상권, 데이터로 보다",
 };
 
 // ── 데이터 ─────────────────────────────────────────────────────────────────────
@@ -208,7 +208,7 @@ export default function HomePage() {
 
       {/* ── 푸터 ──────────────────────────────────────────────────────────── */}
       <footer className="mt-auto border-t border-gray-100 py-8 text-center text-xs text-gray-400">
-        © 2025 골목 나침반 &middot; 서울 소상공인을 위한 AI 분석 플랫폼
+        © 2026 상생나침반 &middot; 서울 소상공인을 위한 AI 분석 플랫폼
       </footer>
 
       {/* 모바일 하단 탭바 여백 */}

@@ -159,7 +159,7 @@ function ChatContent() {
       {/* 중: 채팅 영역 */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <header className="flex h-14 shrink-0 items-center border-b border-gray-100 bg-white px-4">
-          <h1 className="text-sm font-semibold text-golmok-text-main">골목 나침반 AI 상담</h1>
+          <h1 className="text-sm font-semibold text-golmok-text-main">상생나침반 AI 상담</h1>
           {isLoading && (
             <span className="ml-3 flex items-center gap-1.5 text-xs text-golmok-primary">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-golmok-primary" />

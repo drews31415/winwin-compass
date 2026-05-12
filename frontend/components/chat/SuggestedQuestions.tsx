@@ -25,7 +25,7 @@ export function SuggestedQuestions({ onSelect }: Props) {
 
       <div className="text-center">
         <h2 className="text-lg font-semibold text-golmok-text-main">
-          골목 나침반 AI에게 물어보세요
+          상생나침반 AI에게 물어보세요
         </h2>
         <p className="mt-1 text-sm text-golmok-text-muted">
           서울 상권 분석, 지원금 탐색, 창업 상담을 도와드립니다

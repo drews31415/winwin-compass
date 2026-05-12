@@ -584,7 +584,7 @@ class GolmokChatEngine:
         # API 키 없으면 안내 메시지 + 컨텍스트 반환
         if not self._api_key:
             body = context or (
-                "안녕하세요! 골목 나침반 AI 컨설턴트입니다. "
+                "안녕하세요! 상생나침반 AI 컨설턴트입니다. "
                 "궁금하신 상권이나 창업 정보를 물어보세요."
             )
             reply = _DEV_NOTICE + body
