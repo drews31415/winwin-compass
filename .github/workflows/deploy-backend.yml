@@ -32,14 +32,20 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Railway CLI
+        if: env.RAILWAY_TOKEN != ''
         run: npm install -g @railway/cli
 
+      - name: Skip Railway deploy
+        if: env.RAILWAY_TOKEN == ''
+        run: echo "RAILWAY_TOKEN is not configured; skipping Railway deploy."
+
       - name: Deploy to Railway
+        if: env.RAILWAY_TOKEN != ''
         working-directory: backend
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service golmok-backend
+        run: railway up --service winwin-compass --detach
