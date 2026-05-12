@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  Compass,
   MessageSquare,
   Map,
   BarChart2,
@@ -37,8 +37,15 @@ export function Sidebar() {
       {/* 로고 */}
       <div className="flex h-16 shrink-0 items-center border-b border-gray-100 px-5">
         <Link href="/" className="group flex items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary transition-colors group-hover:bg-brand-primary-dark">
-            <Compass className="h-4 w-4 text-white" />
+          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-brand-primary/15">
+            <Image
+              src="/brand/logo.png"
+              alt="상생나침반 로고"
+              fill
+              sizes="36px"
+              className="object-contain p-1"
+              priority
+            />
           </span>
           <span className="font-display text-base font-bold tracking-tight text-brand-primary">
             상생나침반

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { StatsCounter } from "@/components/ui/StatsCounter";
@@ -72,6 +73,17 @@ export default function HomePage() {
           <span className="h-1.5 w-1.5 rounded-full bg-brand-primary-light animate-pulse" />
           서울시 공공데이터 기반
         </span>
+
+        <div className="relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-card ring-1 ring-brand-primary/10">
+          <Image
+            src="/brand/logo.png"
+            alt="상생나침반 로고"
+            fill
+            sizes="56px"
+            className="object-contain p-2"
+            priority
+          />
+        </div>
 
         {/* 타이틀 */}
         <h1 className="relative mb-4 font-display text-4xl font-bold leading-tight tracking-tight text-brand-text-main sm:text-5xl lg:text-6xl">

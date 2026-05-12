@@ -86,14 +86,20 @@
   }
 
   html.digital-care-mode {
-    font-size: 18px;
+    font-size: 20px;
+    scroll-behavior: auto;
   }
 
   html.digital-care-mode button,
   html.digital-care-mode input,
   html.digital-care-mode select,
   html.digital-care-mode textarea {
-    min-height: 48px;
+    min-height: 56px;
+    font-size: 1rem;
+  }
+
+  html.digital-care-mode body {
+    letter-spacing: 0;
   }
 }
 
@@ -189,5 +195,30 @@
 
   html.digital-care-mode .care-mode-detail {
     display: none;
+  }
+
+  html.digital-care-mode .text-\[10px\],
+  html.digital-care-mode .text-xs {
+    font-size: 0.9rem !important;
+    line-height: 1.35rem !important;
+  }
+
+  html.digital-care-mode .text-sm {
+    font-size: 1.05rem !important;
+    line-height: 1.65rem !important;
+  }
+
+  html.digital-care-mode .text-base {
+    font-size: 1.15rem !important;
+    line-height: 1.8rem !important;
+  }
+
+  html.digital-care-mode .text-lg {
+    font-size: 1.3rem !important;
+    line-height: 2rem !important;
+  }
+
+  html.digital-care-mode .shadow-card {
+    box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.12), 0 8px 24px rgba(0, 0, 0, 0.08);
   }
 }

@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   description:
     "서울 지역상권 AI 분석 플랫폼. 소상공인을 위한 맞춤 상권 분석과 정책 안내를 제공합니다.",
   keywords: ["지역상권", "소상공인", "창업", "서울", "AI 분석", "상권 분석"],
+  icons: {
+    icon: "/brand/logo.png",
+    apple: "/brand/logo.png",
+  },
 };
 
 export const viewport: Viewport = {

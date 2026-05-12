@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import { AlertTriangle, BriefcaseBusiness, Search, Target, Users, WalletCards } from "lucide-react";
+import { AlertTriangle, BriefcaseBusiness, Search, ShieldAlert, Target, Users, WalletCards } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CardSkeleton } from "@/components/ui/LoadingSkeleton";
@@ -14,6 +14,15 @@ import { matchPolicies, searchPolicies, type Policy } from "@/lib/api";
 const BUSINESS_TYPES = ["카페", "음식점", "편의점", "미용실", "소매업", "생활서비스"];
 const AREAS = ["마포구", "종로구", "성동구", "강남구", "송파구", "용산구", "서대문구"];
 const USER_TYPES = ["청년", "여성", "시니어", "1인 창업자"];
+const AREA_RISK_SCORES: Record<string, number> = {
+  마포구: 72,
+  종로구: 58,
+  성동구: 44,
+  강남구: 39,
+  송파구: 42,
+  용산구: 67,
+  서대문구: 61,
+};
 
 const SAMPLE_POLICIES: Policy[] = [
   {
@@ -83,7 +92,6 @@ type FormState = {
   area: string;
   capital: string;
   age: string;
-  risk_score: string;
   user_types: string[];
 };
 
@@ -93,8 +101,7 @@ function riskMessage(score: number) {
   return "위험도는 낮지만 초기 창업비와 홍보 지원을 중심으로 추천합니다.";
 }
 
-function enrichPolicies(policies: Policy[], form: FormState) {
-  const risk = Number(form.risk_score) || 0;
+function enrichPolicies(policies: Policy[], form: FormState, risk: number) {
   const source = policies.length ? policies : SAMPLE_POLICIES;
   return source.map((policy) => ({
     ...policy,
@@ -120,7 +127,6 @@ export default function PolicyPage() {
     area: "마포구",
     capital: "5000",
     age: "32",
-    risk_score: "72",
     user_types: ["청년", "1인 창업자"],
   });
   const [searchQuery, setSearchQuery] = useState("");
@@ -128,8 +134,8 @@ export default function PolicyPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
 
-  const visiblePolicies = useMemo(() => enrichPolicies(policies, form), [policies, form]);
-  const risk = Number(form.risk_score) || 0;
+  const risk = AREA_RISK_SCORES[form.area] ?? 50;
+  const visiblePolicies = useMemo(() => enrichPolicies(policies, form, risk), [policies, form, risk]);
 
   const updateForm = (key: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -334,28 +340,33 @@ export default function PolicyPage() {
                   </div>
                 </label>
 
-                <label className="space-y-2 md:col-span-2">
+                <div className="space-y-2 md:col-span-2">
                   <span className="text-sm font-semibold text-brand-text-main">폐업 위험 점수</span>
                   <div className="rounded-lg border border-gray-100 bg-brand-surface/70 p-4">
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={form.risk_score}
-                        onChange={(event) => updateForm("risk_score", event.target.value)}
-                        className="h-2 flex-1 accent-brand-primary"
-                      />
-                      <span className="w-14 rounded-md bg-white px-2 py-1 text-center text-sm font-black text-brand-primary">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-5 w-5 text-brand-accent" />
+                        <span className="font-bold text-brand-text-main">{form.area} 상권 데이터 기반</span>
+                      </div>
+                      <span className="rounded-md bg-white px-3 py-1.5 text-lg font-black text-brand-primary">
                         {risk}점
                       </span>
+                    </div>
+                    <div className="mt-4 h-3 overflow-hidden rounded-full bg-white">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-brand-risk-low via-brand-accent to-brand-risk-high"
+                        style={{ width: `${risk}%` }}
+                      />
                     </div>
                     <p className="mt-3 flex gap-2 text-sm leading-6 text-brand-text-muted">
                       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-brand-accent" />
                       {riskMessage(risk)}
                     </p>
+                    <p className="mt-2 text-xs text-brand-text-muted">
+                      현재 정책 페이지에서는 선택한 지역의 데모 상권 위험 점수를 자동 적용합니다. 사용자가 임의로 조정하지 않습니다.
+                    </p>
                   </div>
-                </label>
+                </div>
               </div>
 
               <Button disabled={isLoading} className="mt-5 h-11 w-full bg-brand-primary hover:bg-brand-primary-dark">
