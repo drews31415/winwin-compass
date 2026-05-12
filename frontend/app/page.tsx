@@ -61,7 +61,7 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col bg-brand-surface">
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center px-4 pb-16 pt-20 text-center lg:pt-28">
+      <section className="relative flex flex-col items-center px-4 pb-5 pt-7 text-center sm:pb-10 sm:pt-14 lg:pt-24">
         {/* 배경 장식 */}
         <div
           aria-hidden="true"
@@ -69,30 +69,30 @@ export default function HomePage() {
         />
 
         {/* 배지 */}
-        <span className="relative mb-5 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-4 py-1.5 text-xs font-medium text-brand-primary">
+        <span className="relative mb-3 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-3 py-1 text-[11px] font-medium text-brand-primary sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs">
           <span className="h-1.5 w-1.5 rounded-full bg-brand-primary-light animate-pulse" />
           서울시 공공데이터 기반
         </span>
 
-        <div className="relative mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-card ring-1 ring-brand-primary/10">
+        <div className="relative mb-3 flex h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-card ring-1 ring-brand-primary/10 sm:mb-5 sm:h-28 sm:w-28 lg:h-24 lg:w-24">
           <Image
             src="/brand/logo.png"
             alt="상생나침반 로고"
             fill
-            sizes="56px"
-            className="object-contain p-2"
+            sizes="(max-width: 640px) 96px, 112px"
+            className="object-contain p-2.5"
             priority
           />
         </div>
 
         {/* 타이틀 */}
-        <h1 className="relative mb-4 font-display text-4xl font-bold leading-tight tracking-tight text-brand-text-main sm:text-5xl lg:text-6xl">
+        <h1 className="relative mb-2 font-display text-3xl font-bold leading-tight tracking-tight text-brand-text-main sm:mb-4 sm:text-5xl lg:text-6xl">
           내 상권,{" "}
           <span className="text-gradient">데이터로 보다</span>
         </h1>
 
         {/* 서브타이틀 */}
-        <p className="relative mb-10 max-w-md text-base text-brand-text-muted sm:text-lg">
+        <p className="relative mb-5 max-w-md text-sm text-brand-text-muted sm:mb-10 sm:text-lg">
           서울시 공공데이터 기반 지역상권 AI 분석 서비스
         </p>
 
@@ -108,18 +108,18 @@ export default function HomePage() {
             "focus-within:border-brand-primary focus-within:shadow-card-hover focus-within:ring-2 focus-within:ring-brand-primary/15",
           )}
         >
-          <Search className="ml-4 h-5 w-5 shrink-0 text-gray-400" />
+          <Search className="ml-3 h-5 w-5 shrink-0 text-gray-400 sm:ml-4" />
           <input
             type="text"
             name="q"
             autoComplete="off"
             placeholder="찾고 싶은 상권이나 질문을 입력하세요"
-            className="flex-1 bg-transparent py-4 pl-3 pr-2 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent py-3 pl-2 pr-2 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none sm:py-4 sm:pl-3"
           />
           <button
             type="submit"
             className={cn(
-              "m-1.5 shrink-0 rounded-xl px-5 py-2.5",
+              "m-1.5 shrink-0 rounded-xl px-4 py-2.5 sm:px-5",
               "bg-brand-primary text-sm font-medium text-white",
               "transition-colors hover:bg-brand-primary-dark",
               "focus:outline-none focus:ring-2 focus:ring-brand-primary/40",
@@ -130,14 +130,14 @@ export default function HomePage() {
         </form>
 
         {/* 예시 질문 태그 */}
-        <div className="relative mt-4 flex flex-wrap justify-center gap-2">
+        <div className="relative mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-4 sm:gap-2">
           {EXAMPLE_TAGS.map((tag) => (
             <Link
               key={tag}
               href={`/chat?q=${encodeURIComponent(tag)}`}
               className={cn(
-                "rounded-full border border-gray-200 bg-white px-3.5 py-1.5",
-                "text-xs text-gray-600 shadow-sm",
+                "rounded-full border border-gray-200 bg-white px-2.5 py-1 sm:px-3.5 sm:py-1.5",
+                "text-[11px] text-gray-600 shadow-sm sm:text-xs",
                 "transition-all duration-150",
                 "hover:border-brand-primary hover:text-brand-primary hover:shadow-card",
               )}
@@ -149,17 +149,17 @@ export default function HomePage() {
       </section>
 
       {/* ── 2. 빠른 시작 카드 ─────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-3xl px-4 pb-14">
-        <h2 className="mb-6 text-center text-lg font-semibold text-brand-text-main">
+      <section className="mx-auto w-full max-w-3xl px-4 pb-8 sm:pb-14">
+        <h2 className="mb-3 text-center text-base font-semibold text-brand-text-main sm:mb-6 sm:text-lg">
           무엇을 도와드릴까요?
         </h2>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
           {QUICK_CARDS.map((card) => (
             <Link key={card.href} href={card.href} className="group block">
               <div
                 className={cn(
-                  "flex h-full flex-col rounded-2xl border-2 border-gray-100 bg-white p-6",
+                  "flex h-full min-h-[112px] flex-col rounded-2xl border-2 border-gray-100 bg-white p-3 sm:min-h-[180px] sm:p-6",
                   "shadow-card",
                   "transition-all duration-200",
                   "group-hover:border-brand-primary group-hover:-translate-y-1 group-hover:shadow-card-hover",
@@ -168,7 +168,7 @@ export default function HomePage() {
                 {/* 이모지 아이콘 */}
                 <span
                   className={cn(
-                    "mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-2xl",
+                    "mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-xl sm:mb-4 sm:h-11 sm:w-11 sm:text-2xl",
                     card.bg,
                   )}
                   role="img"
@@ -177,15 +177,15 @@ export default function HomePage() {
                   {card.emoji}
                 </span>
 
-                <h3 className="mb-1.5 font-semibold text-gray-900 transition-colors group-hover:text-brand-primary">
+                <h3 className="mb-1 text-sm font-semibold text-gray-900 transition-colors group-hover:text-brand-primary sm:mb-1.5 sm:text-base">
                   {card.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-gray-500">
+                <p className="text-xs leading-snug text-gray-500 sm:text-sm sm:leading-relaxed">
                   {card.desc}
                 </p>
 
                 {/* 화살표 */}
-                <span className="mt-4 text-xs font-medium text-brand-primary-light opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="mt-auto pt-2 text-[11px] font-medium text-brand-primary-light opacity-100 transition-opacity sm:mt-4 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
                   바로가기 →
                 </span>
               </div>
@@ -195,7 +195,7 @@ export default function HomePage() {
       </section>
 
       {/* ── 3. 통계 배너 ──────────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-3xl px-4 pb-14">
+      <section className="mx-auto hidden w-full max-w-3xl px-4 pb-14 sm:block">
         <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-card">
           <div className="grid grid-cols-3 divide-x divide-gray-100">
             {STATS.map(({ target, suffix, label }) => (
