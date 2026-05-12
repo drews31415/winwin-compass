@@ -26,10 +26,10 @@ const SAMPLE_FORECAST: ForecastResponse = {
   trend_summary: "최근 흐름은 보합권이며 향후 4분기 완만한 회복이 예상됩니다.",
   confidence: 0.72,
   forecast: [
-    { quarter: "2025Q1", date: "2025-01-01", predicted_sales: 225000000, lower_bound: 188000000, upper_bound: 262000000, trend: "보합" },
-    { quarter: "2025Q2", date: "2025-04-01", predicted_sales: 238000000, lower_bound: 198000000, upper_bound: 278000000, trend: "상승" },
-    { quarter: "2025Q3", date: "2025-07-01", predicted_sales: 246000000, lower_bound: 205000000, upper_bound: 292000000, trend: "상승" },
-    { quarter: "2025Q4", date: "2025-10-01", predicted_sales: 232000000, lower_bound: 190000000, upper_bound: 271000000, trend: "보합" },
+    { quarter: "2026Q2", date: "2026-04-01", predicted_sales: 225000000, lower_bound: 188000000, upper_bound: 262000000, trend: "보합" },
+    { quarter: "2026Q3", date: "2026-07-01", predicted_sales: 238000000, lower_bound: 198000000, upper_bound: 278000000, trend: "상승" },
+    { quarter: "2026Q4", date: "2026-10-01", predicted_sales: 246000000, lower_bound: 205000000, upper_bound: 292000000, trend: "상승" },
+    { quarter: "2027Q1", date: "2027-01-01", predicted_sales: 232000000, lower_bound: 190000000, upper_bound: 271000000, trend: "보합" },
   ],
   chart_data: { labels: [], predicted: [], lower: [], upper: [] },
 };

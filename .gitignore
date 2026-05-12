@@ -6,6 +6,7 @@
 !frontend/.env.production.example
 .claude/
 .DS_Store
+node_modules/
 backend/models/*.pkl
 backend/models/*_meta.json
 backend/.venv/
@@ -22,3 +23,4 @@ frontend/test-results/
 frontend/playwright-report/
 frontend/*.tsbuildinfo
 frontend/*.log
+demo_videos/

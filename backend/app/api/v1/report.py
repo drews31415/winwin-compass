@@ -42,10 +42,10 @@ def _sample_report(area_cd: str) -> ReportOut:
         ),
         charts=ReportChartsOut(
             sales_trend=[
-                {"quarter": "2023Q4", "avg_sales": 210000000},
-                {"quarter": "2024Q1", "avg_sales": 218000000},
-                {"quarter": "2024Q2", "avg_sales": 226000000},
-                {"quarter": "2024Q3", "avg_sales": 230000000},
+                {"quarter": "2025Q2", "avg_sales": 210000000},
+                {"quarter": "2025Q3", "avg_sales": 218000000},
+                {"quarter": "2025Q4", "avg_sales": 226000000},
+                {"quarter": "2026Q1", "avg_sales": 230000000},
             ],
             time_slots=[
                 {"slot": "06-11", "amount": 12},
@@ -242,13 +242,13 @@ async def get_area_report(
         )
         .where(SalesData.area_cd == area_cd)
         .group_by(SalesData.year_quarter)
-        .order_by(SalesData.year_quarter)
+        .order_by(SalesData.year_quarter.desc())
         .limit(8)
     )).all()
 
     sales_trend = [
         {"quarter": r.year_quarter, "avg_sales": int(r.avg_sales or 0)}
-        for r in trend_rows
+        for r in sorted(trend_rows, key=lambda row: row.year_quarter)
     ]
 
     time_slots      = _extract_time_slots(sales_rows)

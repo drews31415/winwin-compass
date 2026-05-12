@@ -351,7 +351,7 @@ async def get_area_risk(area_cd: str, db: AsyncSession = Depends(get_db)):
 async def trigger_collect(
     area_cd: str,
     background_tasks: BackgroundTasks,
-    year_quarter: str = "2024Q3",
+    year_quarter: str = "2026Q1",
     db: AsyncSession = Depends(get_db),
 ):
     """

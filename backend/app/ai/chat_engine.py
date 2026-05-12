@@ -689,13 +689,13 @@ class GolmokChatEngine:
 
     def _fallback_forecast_result(self, area_cd: str) -> dict:
         base = 230_000_000 if area_cd == "3110016" else 260_000_000
-        quarters = ["2025Q1", "2025Q2", "2025Q3", "2025Q4"]
+        quarters = ["2026Q2", "2026Q3", "2026Q4", "2027Q1"]
         forecast = []
         for idx, quarter in enumerate(quarters):
             predicted = int(base * (1 + 0.025 * idx) * (0.96 if idx == 3 else 1))
             forecast.append({
                 "quarter": quarter,
-                "date": ["2025-01-01", "2025-04-01", "2025-07-01", "2025-10-01"][idx],
+                "date": ["2026-04-01", "2026-07-01", "2026-10-01", "2027-01-01"][idx],
                 "predicted_sales": predicted,
                 "lower_bound": int(predicted * 0.82),
                 "upper_bound": int(predicted * 1.18),

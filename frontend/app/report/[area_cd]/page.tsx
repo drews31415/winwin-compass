@@ -86,14 +86,14 @@ function sampleReport(areaCd: string): ReportResponse {
     },
     charts: {
       sales_trend: [
-        { quarter: "2022Q1", avg_sales: 185000000 },
-        { quarter: "2022Q2", avg_sales: 194000000 },
-        { quarter: "2022Q3", avg_sales: 202000000 },
-        { quarter: "2022Q4", avg_sales: 213000000 },
-        { quarter: "2023Q1", avg_sales: 218000000 },
-        { quarter: "2023Q2", avg_sales: 225000000 },
-        { quarter: "2023Q3", avg_sales: 231000000 },
-        { quarter: "2024Q3", avg_sales: 230000000 },
+        { quarter: "2024Q2", avg_sales: 185000000 },
+        { quarter: "2024Q3", avg_sales: 194000000 },
+        { quarter: "2024Q4", avg_sales: 202000000 },
+        { quarter: "2025Q1", avg_sales: 213000000 },
+        { quarter: "2025Q2", avg_sales: 218000000 },
+        { quarter: "2025Q3", avg_sales: 225000000 },
+        { quarter: "2025Q4", avg_sales: 231000000 },
+        { quarter: "2026Q1", avg_sales: 238000000 },
       ],
       time_slots: [
         { slot: "06시", ratio: 6 },

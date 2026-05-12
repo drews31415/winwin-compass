@@ -232,7 +232,7 @@ class SeoulOpenAPI(BaseCollector):
         self,
         session: AsyncSession,
         area_cd: str,
-        year_quarter: str = "2024Q3",
+        year_quarter: str = "2026Q1",
     ) -> int:
         """
         단일 상권(area_cd)의 4종 데이터를 병렬로 수집해 DB에 저장.

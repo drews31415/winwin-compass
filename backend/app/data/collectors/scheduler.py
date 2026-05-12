@@ -13,7 +13,7 @@ from app.models.database import CommercialArea
 logger = logging.getLogger(__name__)
 
 _BATCH_SIZE = 10
-_CURRENT_QUARTER = "2024Q3"
+_CURRENT_QUARTER = "2026Q1"
 
 # 서울 주요 상권 코드 — 실제 운영 시 API로 확인 후 갱신
 _TOP_50_AREA_CODES: list[str] = [
