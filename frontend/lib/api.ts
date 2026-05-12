@@ -105,6 +105,34 @@ export type RiskResponse = {
   compared_to_avg: string;
 };
 
+export type MarketingPurpose = "sns" | "review" | "flyer" | "menu" | "event" | "pivot";
+export type MarketingTone = "friendly" | "premium" | "urgent" | "calm" | "young";
+
+export type MarketingGenerateParams = {
+  business_type: string;
+  area: string;
+  purpose: MarketingPurpose;
+  tone: MarketingTone;
+  target_customer?: string;
+  risk_factors?: string[];
+  offer?: string;
+  menu_items?: string[];
+  extra_context?: string;
+};
+
+export type MarketingContent = {
+  title: string;
+  channel: string;
+  content: string;
+  usage_tip: string;
+};
+
+export type MarketingGenerateResponse = {
+  contents: MarketingContent[];
+  action_checklist: string[];
+  source: "openai" | "sample";
+};
+
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: { "Content-Type": "application/json", ...init?.headers },
@@ -168,5 +196,14 @@ export function searchPolicies(query: string): Promise<{ policies: Policy[] }> {
   return apiFetch<{ policies: Policy[] }>("/api/v1/policy/search", {
     method: "POST",
     body: JSON.stringify({ query }),
+  });
+}
+
+export function generateMarketing(
+  params: MarketingGenerateParams,
+): Promise<MarketingGenerateResponse> {
+  return apiFetch<MarketingGenerateResponse>("/api/v1/marketing/generate", {
+    method: "POST",
+    body: JSON.stringify(params),
   });
 }

@@ -11,6 +11,7 @@ from app.api.v1 import chat as v1_chat
 from app.api.v1 import report as v1_report
 from app.api.v1 import policy as v1_policy
 from app.api.v1 import ml as v1_ml
+from app.api.v1 import marketing as v1_marketing
 from app.core.database import AsyncSessionLocal
 from app.core.config import settings
 from app.data.collectors.scheduler import create_scheduler, initial_seed
@@ -97,6 +98,7 @@ app.include_router(v1_chat.router,      prefix="/api/v1/chat",   tags=["chat"])
 app.include_router(v1_report.router,    prefix="/api/v1/report", tags=["report"])
 app.include_router(v1_policy.router,    prefix="/api/v1/policy", tags=["policy"])
 app.include_router(v1_ml.router,        prefix="/api/v1/ml",     tags=["ml"])
+app.include_router(v1_marketing.router, prefix="/api/v1/marketing", tags=["marketing"])
 app.include_router(data_routes.router,  prefix="/api/v1",        tags=["data"])
 
 

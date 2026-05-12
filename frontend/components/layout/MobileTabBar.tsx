@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, MessageSquare, Map, BarChart2, Target } from "lucide-react";
+import { Compass, MessageSquare, Map, BarChart2, Target, Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TAB_ITEMS = [
@@ -11,6 +11,7 @@ const TAB_ITEMS = [
   { icon: Map,           label: "지도",     href: "/map"    },
   { icon: BarChart2,     label: "리포트",   href: "/report" },
   { icon: Target,        label: "정책",     href: "/policy" },
+  { icon: Megaphone,     label: "마케팅",   href: "/marketing" },
 ] as const;
 
 export function MobileTabBar() {
@@ -39,7 +40,7 @@ export function MobileTabBar() {
             key={href}
             href={href}
             className={cn(
-              "flex flex-1 flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
+              "flex flex-1 flex-col items-center justify-center gap-0.5 text-[10px] font-medium transition-colors",
               isActive
                 ? "text-golmok-primary"
                 : "text-gray-400 hover:text-gray-600",

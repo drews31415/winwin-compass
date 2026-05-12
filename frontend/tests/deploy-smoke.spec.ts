@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const baseUrl = "https://winwin-compass.vercel.app";
-const paths = ["/", "/chat", "/map", "/report", "/policy"];
+const paths = ["/", "/chat", "/map", "/report", "/policy", "/marketing"];
 
 for (const path of paths) {
   test(`smoke ${path}`, async ({ page }) => {

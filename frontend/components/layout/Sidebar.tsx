@@ -8,6 +8,7 @@ import {
   Map,
   BarChart2,
   Target,
+  Megaphone,
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -17,6 +18,7 @@ const NAV_ITEMS = [
   { icon: Map,           label: "상권 지도",  href: "/map"      },
   { icon: BarChart2,     label: "리포트",     href: "/report"   },
   { icon: Target,        label: "지원 정책",  href: "/policy"   },
+  { icon: Megaphone,     label: "마케팅",     href: "/marketing" },
   { icon: Settings,      label: "설정",       href: "/settings" },
 ] as const;
 

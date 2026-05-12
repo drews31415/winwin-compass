@@ -43,7 +43,14 @@ echo "[5] Policy match"
 "${CURL_BIN}" -s "${BASE_URL}/api/v1/policy/match?business_type=%EC%B9%B4%ED%8E%98&capital=5000" | json_pretty
 
 echo
-echo "[6] Chat simple"
+echo "[6] Marketing generate"
+"${CURL_BIN}" -s -X POST "${BASE_URL}/api/v1/marketing/generate" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  -d '{"business_type":"\uce74\ud398","area":"\uc885\ub85c\uad6c","purpose":"sns","tone":"friendly","target_customer":"30\ub300 \uc9c1\uc7a5\uc778","risk_factors":["\uc810\uc2ec \uc720\ub3d9\uc778\uad6c \uac10\uc18c","\ub3d9\uc77c \uc5c5\uc885 \uacbd\uc7c1 \uacfc\ubc00"],"offer":"\ud3c9\uc77c \uc810\uc2ec 10% \ud560\uc778","menu_items":["\uc544\uba54\ub9ac\uce74\ub178","\uc0cc\ub4dc\uc704\uce58"]}' \
+  | json_pretty
+
+echo
+echo "[7] Chat simple"
 "${CURL_BIN}" -s -X POST "${BASE_URL}/api/v1/chat/simple" \
   -H "Content-Type: application/json; charset=utf-8" \
   -d '{"message":"\uc885\ub85c3\uac00 \uce74\ud398 \ucc3d\uc5c5 \uc5b4\ub54c?","session_id":"smoke-test","user_context":{}}' \

@@ -21,7 +21,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Bot, Building2, ExternalLink, Percent, ReceiptText, Store, Users } from "lucide-react";
+import { Bot, Building2, ExternalLink, Megaphone, Percent, ReceiptText, Store, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RiskGauge } from "@/components/report/RiskGauge";
 import { StatCard } from "@/components/report/StatCard";
@@ -296,12 +296,24 @@ export default function ReportDetailPage() {
                 공공데이터 기반 매출, 점포, 인구, 정책 정보를 종합해 창업 관점으로 정리했습니다.
               </p>
             </div>
-            <Button asChild className="bg-golmok-primary hover:bg-golmok-primary-dark">
-              <Link href={`/chat?area=${encodeURIComponent(report.area_nm)}`}>
-                <Bot className="mr-2 h-4 w-4" />
-                AI에게 이 상권 물어보기
-              </Link>
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild className="bg-golmok-primary hover:bg-golmok-primary-dark">
+                <Link href={`/chat?area=${encodeURIComponent(report.area_nm)}`}>
+                  <Bot className="mr-2 h-4 w-4" />
+                  AI에게 이 상권 물어보기
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="border-golmok-primary/30 text-golmok-primary hover:bg-golmok-primary/10">
+                <Link
+                  href={`/marketing?area=${encodeURIComponent(report.area_nm)}&risk=${encodeURIComponent(
+                    `${report.area_nm} 상권 폐업 위험 ${report.risk_score}점`,
+                  )}`}
+                >
+                  <Megaphone className="mr-2 h-4 w-4" />
+                  마케팅 문구 만들기
+                </Link>
+              </Button>
+            </div>
           </div>
           <RiskGauge score={report.risk_score} className="self-center" />
         </header>
