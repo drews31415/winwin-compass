@@ -178,6 +178,8 @@ interface Props {
   updateFilter: <K extends keyof MapFilters>(key: K, value: MapFilters[K]) => void;
   resetFilters: () => void;
   onSelectArea: (area: AreaMapFeature) => void;
+  className?: string;
+  onClose?: () => void;
 }
 
 export function MapSidebar({
@@ -189,6 +191,8 @@ export function MapSidebar({
   updateFilter,
   resetFilters,
   onSelectArea,
+  className,
+  onClose,
 }: Props) {
   const hasFilters = useMemo(
     () =>
@@ -201,11 +205,19 @@ export function MapSidebar({
   );
 
   return (
-    <aside className="flex h-full w-[260px] shrink-0 flex-col border-r border-gray-100 bg-white">
+    <aside className={cn("flex h-full w-[260px] shrink-0 flex-col border-r border-gray-100 bg-white", className)}>
       {/* 헤더 */}
       <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
         <span className="text-sm font-semibold text-brand-text-main">상권 필터</span>
-        {hasFilters && (
+        {onClose ? (
+          <button
+            onClick={onClose}
+            className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            aria-label="필터 닫기"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        ) : hasFilters && (
           <button
             onClick={resetFilters}
             className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline"
@@ -215,6 +227,18 @@ export function MapSidebar({
           </button>
         )}
       </div>
+
+      {onClose && hasFilters && (
+        <div className="border-b border-gray-100 px-4 py-2">
+          <button
+            onClick={resetFilters}
+            className="flex items-center gap-1 text-[11px] text-brand-primary hover:underline"
+          >
+            <RotateCcw className="h-3 w-3" />
+            필터 초기화
+          </button>
+        </div>
+      )}
 
       <div className="flex flex-1 flex-col gap-5 overflow-y-auto p-4">
         {/* 자치구 */}
