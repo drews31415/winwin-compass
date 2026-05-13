@@ -152,7 +152,7 @@ function ChatContent() {
   };
 
   return (
-    <div className="flex h-dvh overflow-hidden pb-[calc(4rem+env(safe-area-inset-bottom))] lg:h-screen lg:pb-0">
+    <div className="flex h-[calc(100dvh_-_4rem_-_env(safe-area-inset-bottom))] overflow-hidden lg:h-screen">
       {/* 좌: 대화 목록 */}
       <SessionPanel firstMessage={firstUserMsg} onNewChat={clearMessages} />
 
@@ -185,7 +185,7 @@ function ChatContent() {
               disabled={isLoading}
               initialValue={inputValue}
             />
-            <p className="mt-2 text-center text-[10px] text-gray-400">
+            <p className="mt-2 hidden text-center text-[10px] text-gray-400 sm:block">
               공공 데이터 기반 AI 분석 · 최종 결정은 직접 확인하세요
             </p>
           </div>

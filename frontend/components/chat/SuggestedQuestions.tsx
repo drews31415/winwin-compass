@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = [
@@ -20,8 +20,14 @@ export function SuggestedQuestions({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center gap-6 py-8">
       {/* 아이콘 */}
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10">
-        <Compass className="h-8 w-8 text-brand-primary" aria-hidden="true" />
+      <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-card ring-1 ring-brand-primary/10">
+        <Image
+          src="/brand/logo.png"
+          alt="상생나침반 로고"
+          fill
+          sizes="64px"
+          className="object-contain p-1"
+        />
       </div>
 
       <div className="text-center">
