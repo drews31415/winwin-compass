@@ -47,11 +47,11 @@ general      - 그 외 일반 대화
 # 키워드 매핑 — comparison/policy 우선 판정
 _INTENT_KEYWORDS: dict[str, set[str]] = {
     "comparison": {"vs", "VS", "비교", "대비", "어디가", "더 나"},
-    "policy":     {"정책", "지원금", "융자", "보조금", "혜택", "신청", "컨설팅", "교육", "대출"},
+    "policy":     {"정책", "지원금", "지원사업", "융자", "보조금", "혜택", "신청", "컨설팅", "교육", "대출"},
     "prediction": {"앞으로", "전망", "예측", "될 것 같아", "향후", "미래", "내년"},
     "risk_detail": {"위험", "폐업", "망할", "괜찮아", "리스크", "위기"},
-    "report":     {"분석", "리포트", "창업", "어때", "괜찮아", "어떤가", "검토"},
-    "data_query": {"매출", "점포", "인구", "폐업률", "개업률", "몇", "얼마", "시간대", "요일", "분기"},
+    "report":     {"분석", "리포트", "창업", "추천", "저자본", "어때", "괜찮아", "어떤가", "검토"},
+    "data_query": {"매출", "점포", "인구", "폐업률", "개업률", "현황", "몇", "얼마", "시간대", "요일", "분기"},
 }
 
 _HISTORY_TTL = 60 * 60 * 2   # 2시간
@@ -169,6 +169,12 @@ class WinwinChatEngine:
 
         Returns: "data_query" | "report" | "policy" | "comparison" | "prediction" | "risk_detail" | "general"
         """
+        # 폐업률은 위험 상담이 아니라 정량 지표 조회로 우선 처리한다.
+        if "폐업률" in message:
+            return "data_query"
+        if any(kw in message for kw in ("정책", "지원금", "지원사업", "대출", "융자", "보조금", "받을 수")):
+            return "policy"
+
         # 우선순위 순 keyword 빠른 판정
         for intent in ("comparison", "policy", "prediction", "risk_detail", "report", "data_query"):
             if any(kw in message for kw in _INTENT_KEYWORDS[intent]):
@@ -597,9 +603,18 @@ class WinwinChatEngine:
         from langchain_core.messages import HumanMessage, SystemMessage
 
         hist_msgs    = self._history_to_messages(history)
+        answer_hint = {
+            "data_query": "답변에는 기준 분기와 핵심 지표명(예: 월평균 매출, 폐업률, 점포 수)을 명시하세요.",
+            "prediction": "답변에는 '예측' 또는 '전망'이라는 표현과 향후 분기 기준을 명시하세요.",
+            "risk_detail": "답변에는 위험 점수와 주요 위험 요인을 명시하세요.",
+            "policy": "답변에는 추천 정책명, 신청 대상, 신청 방법 또는 마감일을 명시하세요.",
+            "comparison": "답변에는 비교 기준과 추천 결론을 명시하세요.",
+            "report": "답변에는 상권 분석, 매출, 인구, 위험 요인을 균형 있게 포함하세요.",
+        }.get(intent, "답변에는 사용자가 다음에 볼 항목을 짧게 안내하세요.")
+
         user_content = (
-            f"[수집된 데이터]\n{context}\n\n사용자 질문: {message}"
-            if context else message
+            f"[수집된 데이터]\n{context}\n\n[답변 지침]\n{answer_hint}\n\n사용자 질문: {message}"
+            if context else f"[답변 지침]\n{answer_hint}\n\n사용자 질문: {message}"
         )
         messages = [
             SystemMessage(content=SYSTEM_PROMPT),
