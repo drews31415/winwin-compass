@@ -43,7 +43,7 @@ export function Sidebar() {
               alt="상생나침반 로고"
               fill
               sizes="48px"
-              className="object-contain p-1.5"
+              className="object-contain p-0.5"
               priority
             />
           </span>

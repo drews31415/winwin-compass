@@ -80,7 +80,7 @@ export default function HomePage() {
             alt="상생나침반 로고"
             fill
             sizes="(max-width: 640px) 96px, 112px"
-            className="object-contain p-2.5"
+            className="object-contain p-1"
             priority
           />
         </div>
