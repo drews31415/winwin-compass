@@ -32,7 +32,7 @@ EVAL_QUESTIONS: list[dict[str, Any]] = [
     },
     {
         "id": "Q02",
-        "question": "홍대 상권 폐업률이 어떻게 돼?",
+        "question": "홍대입구 상권 폐업률이 어떻게 돼?",
         "intent": "data_query",
         "expected_keywords": ["폐업률", "%"],
         "should_contain_data": True,
