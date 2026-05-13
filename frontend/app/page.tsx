@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { BarChart3, Bot, Landmark, MapPinned, Search } from "lucide-react";
 import { StatsCounter } from "@/components/ui/StatsCounter";
 import { cn } from "@/lib/utils";
 
@@ -19,39 +19,39 @@ const EXAMPLE_TAGS = [
 
 const QUICK_CARDS = [
   {
-    emoji: "🔍",
+    icon: MapPinned,
     title: "상권 탐색",
-    desc:  "서울 전체 상권 지도에서 내 창업 위치 찾기",
+    desc:  "지도에서 후보지 비교",
     href:  "/map",
-    bg:    "bg-emerald-50",
+    tone:  "bg-emerald-50 text-emerald-700",
   },
   {
-    emoji: "🤖",
+    icon: Bot,
     title: "AI 상담",
-    desc:  "창업 고민을 AI에게 물어보세요",
+    desc:  "창업 고민 바로 질문",
     href:  "/chat",
-    bg:    "bg-violet-50",
+    tone:  "bg-violet-50 text-violet-700",
   },
   {
-    emoji: "📈",
+    icon: BarChart3,
     title: "상권 리포트",
-    desc:  "특정 상권의 매출·인구·위험도 분석",
+    desc:  "매출·인구·위험도 확인",
     href:  "/report",
-    bg:    "bg-blue-50",
+    tone:  "bg-blue-50 text-blue-700",
   },
   {
-    emoji: "💰",
+    icon: Landmark,
     title: "지원 정책",
-    desc:  "나에게 맞는 창업 지원금 찾기",
+    desc:  "내 조건에 맞는 지원 찾기",
     href:  "/policy",
-    bg:    "bg-amber-50",
+    tone:  "bg-amber-50 text-amber-700",
   },
 ] as const;
 
 const STATS = [
   { target: 1600, suffix: "+",  label: "서울시 상권 수"   },
   { target: 3,    suffix: "년", label: "분석 데이터 기간" },
-  { target: 50,   suffix: "+개", label: "지원 정책"        },
+  { target: 5,    suffix: "종", label: "지원 유형"        },
 ] as const;
 
 // ── 페이지 ─────────────────────────────────────────────────────────────────────
@@ -61,7 +61,7 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col bg-brand-surface">
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center px-4 pb-5 pt-7 text-center sm:pb-10 sm:pt-14 lg:pt-24">
+      <section className="relative flex flex-col items-center px-4 pb-4 pt-5 text-center sm:pb-10 sm:pt-14 lg:pt-24">
         {/* 배경 장식 */}
         <div
           aria-hidden="true"
@@ -69,12 +69,12 @@ export default function HomePage() {
         />
 
         {/* 배지 */}
-        <span className="relative mb-3 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-3 py-1 text-[11px] font-medium text-brand-primary sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs">
+        <span className="relative mb-2 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-3 py-1 text-[11px] font-medium text-brand-primary sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs">
           <span className="h-1.5 w-1.5 rounded-full bg-brand-primary-light animate-pulse" />
           서울시 공공데이터 기반
         </span>
 
-        <div className="relative mb-3 flex h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-card ring-1 ring-brand-primary/10 sm:mb-5 sm:h-28 sm:w-28 lg:h-24 lg:w-24">
+        <div className="relative mb-2 flex h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-card ring-1 ring-brand-primary/10 sm:mb-5 sm:h-28 sm:w-28 lg:h-24 lg:w-24">
           <Image
             src="/brand/logo.png"
             alt="상생나침반 로고"
@@ -92,7 +92,7 @@ export default function HomePage() {
         </h1>
 
         {/* 서브타이틀 */}
-        <p className="relative mb-5 max-w-md text-sm text-brand-text-muted sm:mb-10 sm:text-lg">
+        <p className="relative mb-4 max-w-md text-sm text-brand-text-muted sm:mb-10 sm:text-lg">
           서울시 공공데이터 기반 지역상권 AI 분석 서비스
         </p>
 
@@ -113,7 +113,7 @@ export default function HomePage() {
             type="text"
             name="q"
             autoComplete="off"
-            placeholder="찾고 싶은 상권이나 질문을 입력하세요"
+            placeholder="예: 마포구 카페 창업 괜찮을까?"
             className="min-w-0 flex-1 bg-transparent py-3 pl-2 pr-2 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none sm:py-4 sm:pl-3"
           />
           <button
@@ -125,7 +125,7 @@ export default function HomePage() {
               "focus:outline-none focus:ring-2 focus:ring-brand-primary/40",
             )}
           >
-            검색
+            AI에게 묻기
           </button>
         </form>
 
@@ -149,13 +149,13 @@ export default function HomePage() {
       </section>
 
       {/* ── 2. 빠른 시작 카드 ─────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-3xl px-4 pb-8 sm:pb-14">
-        <h2 className="mb-3 text-center text-base font-semibold text-brand-text-main sm:mb-6 sm:text-lg">
+      <section className="mx-auto w-full max-w-3xl px-4 pb-6 sm:pb-14">
+        <h2 className="mb-2 text-center text-base font-semibold text-brand-text-main sm:mb-6 sm:text-lg">
           무엇을 도와드릴까요?
         </h2>
 
         <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-          {QUICK_CARDS.map((card) => (
+          {QUICK_CARDS.map(({ icon: Icon, ...card }) => (
             <Link key={card.href} href={card.href} className="group block">
               <div
                 className={cn(
@@ -165,16 +165,15 @@ export default function HomePage() {
                   "group-hover:border-brand-primary group-hover:-translate-y-1 group-hover:shadow-card-hover",
                 )}
               >
-                {/* 이모지 아이콘 */}
+                {/* 기능 아이콘 */}
                 <span
                   className={cn(
-                    "mb-2 flex h-9 w-9 items-center justify-center rounded-xl text-xl sm:mb-4 sm:h-11 sm:w-11 sm:text-2xl",
-                    card.bg,
+                    "mb-2 flex h-9 w-9 items-center justify-center rounded-xl sm:mb-4 sm:h-11 sm:w-11",
+                    card.tone,
                   )}
-                  role="img"
-                  aria-label={card.title}
+                  aria-hidden="true"
                 >
-                  {card.emoji}
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
 
                 <h3 className="mb-1 text-sm font-semibold text-gray-900 transition-colors group-hover:text-brand-primary sm:mb-1.5 sm:text-base">
