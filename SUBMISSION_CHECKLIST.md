@@ -27,7 +27,7 @@
 
 ## 시연 준비
 
-- [ ] 시연 영상 촬영 완료 (`demo_videos/`)
+- [x] 시연 영상 촬영 완료 (`demo_videos/`)
 - [x] 데모 시나리오 3종 준비 (`DEMO_SCENARIOS.md`)
 - [x] 예상 Q&A 준비 (`DEMO_SCENARIOS.md`)
 - [x] 백업 화면 캡처 (`screenshots/`)
