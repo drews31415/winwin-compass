@@ -152,7 +152,7 @@ function ChatContent() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-dvh overflow-hidden pb-[calc(4rem+env(safe-area-inset-bottom))] lg:h-screen lg:pb-0">
       {/* 좌: 대화 목록 */}
       <SessionPanel firstMessage={firstUserMsg} onNewChat={clearMessages} />
 
