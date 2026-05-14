@@ -48,6 +48,35 @@ def _display_area_name(area_cd: str, area_nm: str | None = None) -> str:
         return AREA_NAME_FALLBACKS.get(area_cd, "상권")
     return area_nm or "상권"
 
+AREA_NAME_FALLBACKS = {
+    "3110016": "종로3가",
+    "3130210": "홍대입구",
+    "3120190": "연남동",
+    "3111042": "성수역",
+    "3130154": "신촌역",
+    "3110082": "익선동",
+    "3120068": "이태원역",
+    "3140101": "강남역",
+    "3150088": "잠실새내",
+    "3120145": "망원시장",
+}
+
+
+def _is_placeholder_area_name(area_nm: str | None, area_cd: str) -> bool:
+    normalized = (area_nm or "").strip()
+    return (
+        not normalized
+        or normalized == area_cd
+        or normalized == f"상권 {area_cd}"
+        or (normalized.isdigit() and len(normalized) >= 6)
+    )
+
+
+def _display_area_name(area_cd: str, area_nm: str | None = None) -> str:
+    if _is_placeholder_area_name(area_nm, area_cd):
+        return AREA_NAME_FALLBACKS.get(area_cd, "상권")
+    return area_nm or "상권"
+
 
 def _sample_report(area_cd: str) -> ReportOut:
     area_nm = _display_area_name(area_cd)

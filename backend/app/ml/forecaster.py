@@ -18,7 +18,7 @@ from app.models.database import PopulationData, SalesData, StoreCount
 
 REGRESSORS = ["store_count", "population", "close_rate"]
 MIN_INTERVAL_HALF_WIDTH_RATIO = 0.12
-FORECAST_MODEL_VERSION = "1.1.0"
+FORECAST_MODEL_VERSION = "1.2.0"
 MIN_YEARLY_SEASONALITY_SAMPLES = 16
 MAX_FIRST_FORECAST_CHANGE = 0.18
 
@@ -82,7 +82,9 @@ class SalesForecaster:
             stores_q = [row for row in store_rows if row.year_quarter == quarter]
             populations_q = [row for row in population_rows if row.year_quarter == quarter]
 
-            monthly_sales = sum(row.monthly_sales_avg or 0 for row in sales_q)
+            monthly_sales = _safe_mean(
+                [float(row.monthly_sales_avg or 0) for row in sales_q]
+            )
             store_count = sum(row.store_count or 0 for row in stores_q)
             close_rate = _safe_mean([row.close_rate for row in stores_q if row.close_rate is not None])
             population = float(populations_q[0].total_population or 0) if populations_q else 0.0
