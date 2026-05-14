@@ -25,6 +25,7 @@ const SAMPLE_FORECAST: ForecastResponse = {
   area_nm: "종로3가",
   trend_summary: "최근 흐름은 보합권이며 향후 4분기 완만한 회복이 예상됩니다.",
   confidence: 0.72,
+  source: "fallback",
   forecast: [
     { quarter: "2026Q2", date: "2026-04-01", predicted_sales: 225000000, lower_bound: 188000000, upper_bound: 262000000, trend: "보합" },
     { quarter: "2026Q3", date: "2026-07-01", predicted_sales: 238000000, lower_bound: 198000000, upper_bound: 278000000, trend: "상승" },
@@ -36,6 +37,19 @@ const SAMPLE_FORECAST: ForecastResponse = {
 
 function toEok(value?: number) {
   return Math.round(((value ?? 0) / 100000000) * 10) / 10;
+}
+
+const TOOLTIP_LABELS: Record<string, string> = {
+  actual: "실제 매출",
+  predicted: "예측 매출",
+  upper: "예측 범위 상단",
+  lower: "예측 범위 하단",
+};
+
+function getSummary(data: ForecastResponse | null, error: string | null) {
+  if (error) return "예측 API에 연결하지 못해 최근 흐름 기준 예시 범위를 표시합니다.";
+  if (!data) return "향후 4분기 예측을 불러오는 중입니다.";
+  return data.trend_summary;
 }
 
 export function ForecastChart({ areaCd, history = [] }: Props) {
@@ -82,22 +96,19 @@ export function ForecastChart({ areaCd, history = [] }: Props) {
     <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
       <div className="mb-4">
         <h2 className="text-xl font-black text-brand-text-main">매출 예측</h2>
-        <p className="text-sm text-brand-text-muted">
-          {data?.trend_summary ?? "향후 4분기 예측을 불러오는 중입니다."}
-          {error ? " 샘플 예측 데이터를 표시합니다." : ""}
-        </p>
+        <p className="text-sm text-brand-text-muted">{getSummary(data, error)}</p>
       </div>
       <ResponsiveContainer width="100%" height={340}>
         <ComposedChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
           <XAxis dataKey="quarter" tickLine={false} axisLine={false} />
           <YAxis tickLine={false} axisLine={false} unit="억" />
-          <Tooltip formatter={(value, name) => [`${value}억원`, name]} />
+          <Tooltip formatter={(value, name) => [`${value}억원`, TOOLTIP_LABELS[String(name)] ?? name]} />
           <Legend />
-          <Area name="신뢰구간" dataKey="upper" fill="#52B788" fillOpacity={0.12} stroke="none" />
+          <Area name="예측 범위" dataKey="upper" fill="#F4A261" fillOpacity={0.16} stroke="none" />
           <Area dataKey="lower" fill="#FFFFFF" fillOpacity={1} stroke="none" legendType="none" />
           <Line name="실제 매출" type="monotone" dataKey="actual" stroke="#2D6A4F" strokeWidth={3} connectNulls={false} dot={{ r: 4 }} />
-          <Line name="예측 매출" type="monotone" dataKey="predicted" stroke="#2D6A4F" strokeWidth={3} strokeDasharray="6 6" connectNulls={false} dot={{ r: 4 }} />
+          <Line name="예측 매출" type="monotone" dataKey="predicted" stroke="#F4A261" strokeWidth={3} strokeDasharray="6 6" connectNulls={false} dot={{ r: 4 }} />
           {referenceQuarter && (
             <ReferenceLine x={referenceQuarter} stroke="#6B7280" strokeDasharray="4 4" label="현재" />
           )}

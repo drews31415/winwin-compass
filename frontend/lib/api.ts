@@ -83,6 +83,7 @@ export type ForecastResponse = {
   forecast: ForecastPoint[];
   trend_summary: string;
   confidence: number;
+  source?: "model" | "fallback";
   chart_data: {
     labels: string[];
     predicted: number[];

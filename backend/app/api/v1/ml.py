@@ -74,8 +74,9 @@ def _fallback_forecast(area_cd: str, periods: int) -> dict:
     return {
         "area_cd": area_cd,
         "forecast": forecast,
-        "trend_summary": "데이터베이스 연결이 없을 때 표시되는 규칙 기반 샘플 예측입니다.",
+        "trend_summary": "최근 매출 흐름을 기준으로 향후 4분기 예상 범위를 표시합니다.",
         "confidence": 0.62,
+        "source": "fallback",
         "model_trained_at": date.today().isoformat(),
     }
 
@@ -135,6 +136,7 @@ async def forecast_area(
         "forecast": forecast,
         "trend_summary": result.get("trend_summary"),
         "confidence": result.get("confidence"),
+        "source": result.get("source", "model"),
         "chart_data": {
             "labels": [item["quarter"] for item in forecast],
             "predicted": [item["predicted_sales"] for item in forecast],
