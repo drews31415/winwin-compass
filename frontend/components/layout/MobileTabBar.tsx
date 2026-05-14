@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import { Compass, MessageSquare, Map, BarChart2, Target, Megaphone } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const SWIPE_THRESHOLD_PX = 48;
 
 const TAB_ITEMS = [
   { icon: Compass,       label: "홈",       href: "/"       },
@@ -16,9 +20,61 @@ const TAB_ITEMS = [
 
 export function MobileTabBar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const handledSwipeRef = useRef(false);
+
+  const activeIndex = TAB_ITEMS.findIndex(({ href }) =>
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(href + "/"),
+  );
+
+  const navigateBySwipe = (direction: -1 | 1) => {
+    if (activeIndex < 0) return;
+
+    const nextIndex = activeIndex + direction;
+    const nextTab = TAB_ITEMS[nextIndex];
+
+    if (!nextTab) return;
+
+    handledSwipeRef.current = true;
+    router.push(nextTab.href);
+  };
 
   return (
     <nav
+      onClickCapture={(event) => {
+        if (!handledSwipeRef.current) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        handledSwipeRef.current = false;
+      }}
+      onTouchStart={(event) => {
+        const touch = event.touches[0];
+        touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+        handledSwipeRef.current = false;
+      }}
+      onTouchEnd={(event) => {
+        const touchStart = touchStartRef.current;
+        touchStartRef.current = null;
+
+        if (!touchStart) return;
+
+        const touch = event.changedTouches[0];
+        const deltaX = touch.clientX - touchStart.x;
+        const deltaY = touch.clientY - touchStart.y;
+
+        if (
+          Math.abs(deltaX) < SWIPE_THRESHOLD_PX ||
+          Math.abs(deltaX) <= Math.abs(deltaY) * 1.2
+        ) {
+          return;
+        }
+
+        navigateBySwipe(deltaX < 0 ? 1 : -1);
+      }}
       className={cn(
         // 모바일 전용 — 데스크톱에서는 Sidebar 사용
         "lg:hidden",
