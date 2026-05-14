@@ -89,12 +89,32 @@ def _get_llm():
 
 def _extract_time_slots(sales_rows) -> list[dict]:
     """JSONB time_slot_sales를 차트용 리스트로 변환 (업종 합산)."""
+    slot_aliases = {
+        "00": "00-06",
+        "00-06": "00-06",
+        "06": "06-11",
+        "09": "06-11",
+        "06-11": "06-11",
+        "11": "11-14",
+        "12": "11-14",
+        "11-14": "11-14",
+        "14": "14-17",
+        "15": "14-17",
+        "14-17": "14-17",
+        "17": "17-21",
+        "18": "17-21",
+        "20": "17-21",
+        "17-21": "17-21",
+        "21": "21-24",
+        "21-24": "21-24",
+    }
     totals: dict[str, int] = {}
     for row in sales_rows:
         if not row.time_slot_sales:
             continue
         for slot, amount in row.time_slot_sales.items():
-            totals[slot] = totals.get(slot, 0) + (int(amount) if amount else 0)
+            normalized_slot = slot_aliases.get(str(slot), str(slot))
+            totals[normalized_slot] = totals.get(normalized_slot, 0) + (int(amount) if amount else 0)
 
     order = ["00-06", "06-11", "11-14", "14-17", "17-21", "21-24"]
     return [

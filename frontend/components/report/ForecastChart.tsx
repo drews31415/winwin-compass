@@ -42,9 +42,16 @@ function toEok(value?: number) {
 const TOOLTIP_LABELS: Record<string, string> = {
   actual: "실제 매출",
   predicted: "예측 매출",
-  upper: "예측 범위 상단",
-  lower: "예측 범위 하단",
+  range: "예측 범위",
 };
+
+function formatTooltip(value: unknown, name: unknown) {
+  if (Array.isArray(value)) {
+    const [lower, upper] = value;
+    return [`${lower}억~${upper}억원`, TOOLTIP_LABELS[String(name)] ?? name];
+  }
+  return [`${value}억원`, TOOLTIP_LABELS[String(name)] ?? name];
+}
 
 function getSummary(data: ForecastResponse | null, error: string | null) {
   if (error) return "예측 API에 연결하지 못해 최근 흐름 기준 예시 범위를 표시합니다.";
@@ -77,15 +84,13 @@ export function ForecastChart({ areaCd, history = [] }: Props) {
       quarter: item.quarter ?? "",
       actual: item.sales ?? toEok(item.avg_sales),
       predicted: null,
-      lower: null,
-      upper: null,
+      range: null,
     }));
     const forecast = (data?.forecast ?? []).map((item) => ({
       quarter: item.quarter,
       actual: null,
       predicted: toEok(item.predicted_sales),
-      lower: toEok(item.lower_bound),
-      upper: toEok(item.upper_bound),
+      range: [toEok(item.lower_bound), toEok(item.upper_bound)],
     }));
     return [...actual, ...forecast];
   }, [data, history]);
@@ -103,10 +108,9 @@ export function ForecastChart({ areaCd, history = [] }: Props) {
           <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
           <XAxis dataKey="quarter" tickLine={false} axisLine={false} />
           <YAxis tickLine={false} axisLine={false} unit="억" />
-          <Tooltip formatter={(value, name) => [`${value}억원`, TOOLTIP_LABELS[String(name)] ?? name]} />
+          <Tooltip formatter={formatTooltip} />
           <Legend />
-          <Area name="예측 범위" dataKey="upper" fill="#F4A261" fillOpacity={0.16} stroke="none" />
-          <Area dataKey="lower" fill="#FFFFFF" fillOpacity={1} stroke="none" legendType="none" />
+          <Area name="예측 범위" type="monotone" dataKey="range" fill="#F4A261" fillOpacity={0.16} stroke="none" activeDot={false} />
           <Line name="실제 매출" type="monotone" dataKey="actual" stroke="#2D6A4F" strokeWidth={3} connectNulls={false} dot={{ r: 4 }} />
           <Line name="예측 매출" type="monotone" dataKey="predicted" stroke="#F4A261" strokeWidth={3} strokeDasharray="6 6" connectNulls={false} dot={{ r: 4 }} />
           {referenceQuarter && (
