@@ -17,6 +17,7 @@ from app.models.schemas import ReportChartsOut, ReportOut
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+_REPORT_CACHE: dict[str, ReportOut] = {}
 
 AREA_NAME_FALLBACKS = {
     "3110016": "종로3가",
@@ -267,6 +268,8 @@ async def get_area_report(
     db: AsyncSession = Depends(get_db),
 ):
     """상권 코드로 종합 리포트 조회."""
+    if area_cd in _REPORT_CACHE:
+        return _REPORT_CACHE[area_cd]
 
     # 1. 상권 기본 정보
     try:
@@ -346,7 +349,7 @@ async def get_area_report(
     # 7. 리포트 화면은 진입 속도가 중요하므로 벡터 검색 대신 정책 샘플을 즉시 제공한다.
     matched_policies = DEMO_POLICIES[:3]
 
-    return ReportOut(
+    report = ReportOut(
         area_nm=area_nm,
         risk_score=round(risk_score, 2),
         report_md=report_md,
@@ -357,3 +360,5 @@ async def get_area_report(
         ),
         matched_policies=matched_policies,
     )
+    _REPORT_CACHE[area_cd] = report
+    return report
