@@ -23,7 +23,7 @@ export function MobileTabBar() {
         // 모바일 전용 — 데스크톱에서는 Sidebar 사용
         "lg:hidden",
         "fixed bottom-0 inset-x-0 z-40",
-        "flex h-16 items-stretch border-t border-gray-100 bg-white",
+        "flex h-[var(--mobile-tabbar-height)] items-stretch border-t border-gray-100 bg-white",
         // 아이폰 홈 인디케이터 영역 확보
         "pb-safe",
       )}

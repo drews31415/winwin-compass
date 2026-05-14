@@ -67,6 +67,11 @@ const AREA_META: Record<string, { area_nm: string; gu_nm: string; area_type: str
   "3120190": { area_nm: "연남동", gu_nm: "마포구", area_type: "지역상권" },
   "3111042": { area_nm: "성수역", gu_nm: "성동구", area_type: "발달상권" },
   "3130154": { area_nm: "신촌역", gu_nm: "서대문구", area_type: "발달상권" },
+  "3110082": { area_nm: "익선동", gu_nm: "종로구", area_type: "지역상권" },
+  "3120068": { area_nm: "이태원역", gu_nm: "용산구", area_type: "관광특구" },
+  "3140101": { area_nm: "강남역", gu_nm: "강남구", area_type: "발달상권" },
+  "3150088": { area_nm: "잠실새내", gu_nm: "송파구", area_type: "지역상권" },
+  "3120145": { area_nm: "망원시장", gu_nm: "마포구", area_type: "전통시장" },
 };
 
 const RECENT_KEY = "brand-recent-reports";
@@ -113,30 +118,34 @@ function sampleReport(areaCd: string): ReportResponse {
       ],
     },
     report_md: `## 상권 종합 평가
-${meta.area_nm} 상권은 점심과 저녁 매출 비중이 높고 20~30대 방문 수요가 안정적인 편입니다.
+${meta.area_nm} 상권은 점심과 저녁 매출 비중이 높고 20~30대 생활인구와 30~40대 직장인구가 함께 유입되는 복합 수요형 상권입니다.
+월평균 매출은 최근 4개 분기 동안 완만하게 증가했고, 폐업 위험은 58점으로 서울 평균과 유사한 중간 수준입니다.
+다만 유사 업종 점포가 밀집해 있어 임대료 부담과 차별화 전략을 함께 검토해야 합니다.
 
 ## 매출 현황
-월평균 매출은 약 2.3억원 수준이며 최근 3년간 완만한 상승 흐름을 보입니다.
+2026년 1분기 기준 월평균 매출은 약 2.3억원 수준입니다. 11~14시 점심 시간대와 17~21시 저녁 시간대 매출 비중이 높아, 회전율이 빠른 메뉴와 퇴근길 포장 수요를 동시에 노릴 수 있습니다.
+최근 분기 추세는 2025년 2분기 2.1억원에서 2026년 1분기 2.3억원으로 상승해 단기 수요는 유지되는 모습입니다.
 
 ## 유동인구 분석
-20~30대 생활인구와 30~40대 직장인구가 함께 관찰되어 평일 점심, 퇴근 시간대 운영 전략이 중요합니다.
+20대와 30대 생활인구 비중이 높고, 직장인구는 30~40대 중심으로 분포합니다. 따라서 낮에는 직장인 점심 수요, 저녁에는 약속과 간편식 수요를 나누어 운영하는 전략이 적합합니다.
 
 ## 위험 신호
-폐업률은 8%대로 낮지는 않습니다. 유사 업종 밀집도가 높아 임대료와 차별화 전략을 함께 검토해야 합니다.
+폐업률은 8%대, 위험 점수는 58점으로 즉시 회피해야 할 고위험 상권은 아니지만 경쟁 강도는 낮지 않습니다. 신규 진입 시 동일 업종과 가격으로 경쟁하기보다 메뉴 전문성, 리뷰 관리, 포장/예약 채널 확보가 필요합니다.
 
 ## 기회 요인
-저녁 시간대 매출 비중이 높아 예약, 포장, 세트 메뉴 중심의 객단가 개선 여지가 있습니다.
+저녁 시간대 매출 비중이 가장 높아 세트 메뉴, 예약 쿠폰, 퇴근길 픽업 프로모션을 적용하기 좋습니다. 20~30대 방문 수요가 확인되므로 SNS 리뷰 이벤트와 짧은 영상형 홍보 문구의 효과도 기대할 수 있습니다.
 
 ## 추천 업종
-- 소형 카페: 회전율과 테이크아웃 수요를 활용할 수 있습니다.
-- 캐주얼 다이닝: 점심과 저녁 피크를 모두 노릴 수 있습니다.
-- 생활서비스: 상주 인구와 직장인 반복 수요에 적합합니다.`,
+- 소형 카페: 20~30대 방문 수요와 테이크아웃 회전율을 활용할 수 있습니다.
+- 간편식/샌드위치: 점심 피크와 퇴근길 포장 수요를 동시에 잡을 수 있습니다.
+- 캐주얼 다이닝: 저녁 시간대 매출 비중이 높아 객단가 개선 여지가 있습니다.`,
     matched_policies: [
       {
         program_nm: "소상공인 정책자금",
         category: "융자",
         budget_max: 7000,
         apply_end: "2026-06-30",
+        reason: "중간 위험 상권에서 초기 운영자금과 시설자금 부담을 낮추는 데 적합합니다.",
         source_url: "https://www.semas.or.kr",
       },
       {
@@ -144,6 +153,7 @@ ${meta.area_nm} 상권은 점심과 저녁 매출 비중이 높고 20~30대 방�
         category: "보조금",
         budget_max: 3000,
         apply_end: "2026-07-31",
+        reason: "상권 회복과 점포 홍보, 공동 마케팅 비용을 보완할 수 있습니다.",
         source_url: "https://www.seoul.go.kr",
       },
       {
@@ -151,6 +161,7 @@ ${meta.area_nm} 상권은 점심과 저녁 매출 비중이 높고 20~30대 방�
         category: "보증",
         budget_max: 10000,
         apply_end: "상시",
+        reason: "담보가 부족한 예비창업자의 대출 접근성을 높이는 보증 상품입니다.",
         source_url: "https://www.seoulshinbo.co.kr",
       },
     ],
@@ -164,8 +175,17 @@ function formatMoney(value?: number) {
   return value.toLocaleString();
 }
 
+function isPlaceholderAreaName(value: string | undefined, areaCd: string) {
+  const normalized = value?.trim();
+  if (!normalized) return true;
+  return normalized === areaCd || normalized === `상권 ${areaCd}` || /^[0-9]{6,}$/.test(normalized);
+}
+
 function normalizeReport(data: ReportResponse, areaCd: string): ReportResponse {
   const meta = AREA_META[areaCd] ?? {};
+  const areaName = isPlaceholderAreaName(data.area_nm, areaCd)
+    ? meta.area_nm || "상권"
+    : data.area_nm;
   const salesTrend = data.charts.sales_trend.map((item) => ({
     quarter: item.quarter ?? item.year_quarter ?? "",
     sales: Math.round(((item.avg_sales ?? item.sales ?? 0) / 100000000) * 10) / 10,
@@ -189,7 +209,7 @@ function normalizeReport(data: ReportResponse, areaCd: string): ReportResponse {
 
   return {
     ...data,
-    area_nm: data.area_nm || meta.area_nm || "상권",
+    area_nm: areaName,
     gu_nm: data.gu_nm || meta.gu_nm || "서울시",
     area_type: data.area_type || meta.area_type || "상권",
     charts: {
@@ -398,7 +418,7 @@ export default function ReportDetailPage() {
               : report.risk_score >= 40
                 ? "운영 안정 자금과 컨설팅, 디지털 전환 지원을 함께 확인하세요."
                 : "초기 창업비와 홍보 지원 중심으로 검토하세요."}{" "}
-            현재 화면은 샘플 정책 기반 데모이며 정책 DB는 확장 예정입니다.
+            아래 정책은 위험 점수, 창업 단계, 자금 필요도를 함께 반영해 우선 확인할 지원사업입니다.
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {report.matched_policies.slice(0, 3).map((policy, index) => (

@@ -47,6 +47,7 @@
 
     /* 사이드바 */
     --sidebar-width: 15rem; /* 240px */
+    --mobile-tabbar-height: calc(4rem + env(safe-area-inset-bottom));
   }
 
   .dark {

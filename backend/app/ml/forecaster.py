@@ -18,6 +18,9 @@ from app.models.database import PopulationData, SalesData, StoreCount
 
 REGRESSORS = ["store_count", "population", "close_rate"]
 MIN_INTERVAL_HALF_WIDTH_RATIO = 0.12
+FORECAST_MODEL_VERSION = "1.1.0"
+MIN_YEARLY_SEASONALITY_SAMPLES = 16
+MAX_FIRST_FORECAST_CHANGE = 0.18
 
 
 def _quarter_to_date(year_quarter: str) -> pd.Timestamp:
@@ -36,6 +39,10 @@ def _date_to_quarter(value: pd.Timestamp) -> str:
 def _safe_mean(values: list[float]) -> float:
     clean = [value for value in values if not pd.isna(value)]
     return float(np.mean(clean)) if clean else 0.0
+
+
+def _clamp(value: float, low: float, high: float) -> float:
+    return min(max(value, low), high)
 
 
 class SalesForecaster:
@@ -105,11 +112,16 @@ class SalesForecaster:
         if len(df) < 2:
             raise ValueError(f"At least 2 quarters are required to train Prophet for {area_cd}")
 
+        # Quarterly demo/public data is often short. Yearly multiplicative seasonality
+        # needs several full cycles; with fewer points it can create a spurious drop
+        # on the first forecast quarter.
+        use_yearly_seasonality = len(df) >= MIN_YEARLY_SEASONALITY_SAMPLES
         model = Prophet(
-            yearly_seasonality=True,
+            yearly_seasonality=use_yearly_seasonality,
             weekly_seasonality=False,
-            seasonality_mode="multiplicative",
-            changepoint_prior_scale=0.05,
+            daily_seasonality=False,
+            seasonality_mode="additive",
+            changepoint_prior_scale=0.03,
             interval_width=0.8,
         )
         for regressor in REGRESSORS:
@@ -119,7 +131,13 @@ class SalesForecaster:
         self.model_cache[area_cd] = model
         self.training_data_cache[area_cd] = df.copy()
         self.trained_at_cache[area_cd] = datetime.utcnow()
-        self.model_store.save(model, self._model_name(area_cd))
+        self.model_store.save(
+            model,
+            self._model_name(area_cd),
+            n_samples=len(df),
+            metrics={"yearly_seasonality": use_yearly_seasonality},
+            version=FORECAST_MODEL_VERSION,
+        )
         return model
 
     async def predict(self, area_cd: str, periods: int = 4, db: AsyncSession | None = None) -> dict:
@@ -149,6 +167,7 @@ class SalesForecaster:
                     "trend": self.get_trend_label(current_sales, predicted),
                 }
             )
+        items = self._calibrate_forecast(history, items)
 
         return {
             "area_cd": area_cd,
@@ -197,7 +216,7 @@ class SalesForecaster:
             return self.model_cache[area_cd]
 
         model_name = self._model_name(area_cd)
-        if self.model_store.exists(model_name):
+        if db is None and self.model_store.exists(model_name):
             model = self.model_store.load(model_name)
             self.model_cache[area_cd] = model
             return model
@@ -206,6 +225,12 @@ class SalesForecaster:
             raise ValueError("db is required when no stored Prophet model exists")
 
         df = await self.prepare_prophet_data(area_cd, db)
+        if self.model_store.exists(model_name) and self._stored_model_matches(model_name, len(df)):
+            model = self.model_store.load(model_name)
+            self.model_cache[area_cd] = model
+            self.training_data_cache[area_cd] = df.copy()
+            return model
+
         return self.train(df, area_cd)
 
     async def _get_history(self, area_cd: str, db: AsyncSession | None) -> pd.DataFrame:
@@ -280,6 +305,51 @@ class SalesForecaster:
             return 0.5
         confidence = 1 - min(float(np.mean(ratios)), 1.0)
         return round(max(0.0, min(confidence, 1.0)), 2)
+
+    def _stored_model_matches(self, name: str, n_samples: int) -> bool:
+        meta = self.model_store._read_meta(self.model_store._stem(name))
+        return (
+            meta.get("version") == FORECAST_MODEL_VERSION
+            and meta.get("n_samples") == n_samples
+        )
+
+    def _recent_growth_rate(self, history: pd.DataFrame) -> float:
+        if len(history) < 2:
+            return 0.0
+        sales = pd.Series(np.expm1(history["y"]).to_numpy(dtype=float))
+        growth = sales.pct_change().replace([np.inf, -np.inf], np.nan).dropna()
+        if growth.empty:
+            return 0.0
+        return _clamp(float(growth.tail(3).mean()), -0.04, 0.06)
+
+    def _calibrate_forecast(self, history: pd.DataFrame, items: list[dict]) -> list[dict]:
+        """Keep short-history forecasts continuous with the latest observed quarter."""
+        if history.empty or not items:
+            return items
+
+        current_sales = float(np.expm1(history["y"].iloc[-1]))
+        first_predicted = float(items[0]["predicted_sales"])
+        if current_sales <= 0:
+            return items
+
+        first_change = (first_predicted - current_sales) / current_sales
+        if abs(first_change) <= MAX_FIRST_FORECAST_CHANGE:
+            return items
+
+        growth = self._recent_growth_rate(history)
+        calibrated = []
+        for index, item in enumerate(items):
+            seasonal_adjustment = -0.025 if index == 3 else 0.0
+            predicted = max(0.0, current_sales * (1 + growth * (index + 1) + seasonal_adjustment))
+            spread = 0.14 if index == 0 else 0.16
+            calibrated.append({
+                **item,
+                "predicted_sales": int(round(predicted)),
+                "lower_bound": int(round(predicted * (1 - spread))),
+                "upper_bound": int(round(predicted * (1 + spread))),
+                "trend": self.get_trend_label(current_sales, predicted),
+            })
+        return calibrated
 
     def _model_name(self, area_cd: str) -> str:
         return f"prophet_{area_cd}.pkl"

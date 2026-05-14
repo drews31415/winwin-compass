@@ -58,10 +58,10 @@ const STATS = [
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-brand-surface">
+    <div className="fixed inset-x-0 top-0 bottom-[var(--mobile-tabbar-height)] flex flex-col overflow-hidden bg-brand-surface lg:static lg:min-h-screen lg:overflow-visible">
 
       {/* ── 1. Hero ────────────────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center px-4 pb-4 pt-5 text-center sm:pb-10 sm:pt-14 lg:pt-24">
+      <section className="relative flex shrink-0 flex-col items-center px-4 pb-3 pt-4 text-center sm:pb-10 sm:pt-14 lg:pt-24">
         {/* 배경 장식 */}
         <div
           aria-hidden="true"
@@ -69,12 +69,12 @@ export default function HomePage() {
         />
 
         {/* 배지 */}
-        <span className="relative mb-2 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-3 py-1 text-[11px] font-medium text-brand-primary sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs">
+        <span className="relative mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-brand-primary/20 bg-brand-primary/8 px-3 py-1 text-[11px] font-medium text-brand-primary sm:mb-5 sm:px-4 sm:py-1.5 sm:text-xs">
           <span className="h-1.5 w-1.5 rounded-full bg-brand-primary-light animate-pulse" />
           서울시 공공데이터 기반
         </span>
 
-        <div className="relative mb-2 flex h-24 w-24 items-center justify-center rounded-3xl bg-white shadow-card ring-1 ring-brand-primary/10 sm:mb-5 sm:h-28 sm:w-28 lg:h-24 lg:w-24">
+        <div className="relative mb-1.5 flex h-20 w-20 items-center justify-center rounded-3xl bg-white shadow-card ring-1 ring-brand-primary/10 sm:mb-5 sm:h-28 sm:w-28 lg:h-24 lg:w-24">
           <Image
             src="/brand/logo.png"
             alt="상생나침반 로고"
@@ -86,13 +86,13 @@ export default function HomePage() {
         </div>
 
         {/* 타이틀 */}
-        <h1 className="relative mb-2 font-display text-3xl font-bold leading-tight tracking-tight text-brand-text-main sm:mb-4 sm:text-5xl lg:text-6xl">
+        <h1 className="relative mb-1.5 font-display text-2xl font-bold leading-tight tracking-tight text-brand-text-main sm:mb-4 sm:text-5xl lg:text-6xl">
           내 상권,{" "}
           <span className="text-gradient">데이터로 보다</span>
         </h1>
 
         {/* 서브타이틀 */}
-        <p className="relative mb-4 max-w-md text-sm text-brand-text-muted sm:mb-10 sm:text-lg">
+        <p className="relative mb-3 max-w-md text-xs text-brand-text-muted sm:mb-10 sm:text-lg">
           서울시 공공데이터 기반 지역상권 AI 분석 서비스
         </p>
 
@@ -114,12 +114,12 @@ export default function HomePage() {
             name="q"
             autoComplete="off"
             placeholder="예: 마포구 카페 창업 괜찮을까?"
-            className="min-w-0 flex-1 bg-transparent py-3 pl-2 pr-2 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none sm:py-4 sm:pl-3"
+            className="min-w-0 flex-1 bg-transparent py-2.5 pl-2 pr-2 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none sm:py-4 sm:pl-3"
           />
           <button
             type="submit"
             className={cn(
-              "m-1.5 shrink-0 rounded-xl px-4 py-2.5 sm:px-5",
+              "m-1 shrink-0 rounded-xl px-3 py-2.5 sm:m-1.5 sm:px-5",
               "bg-brand-primary text-sm font-medium text-white",
               "transition-colors hover:bg-brand-primary-dark",
               "focus:outline-none focus:ring-2 focus:ring-brand-primary/40",
@@ -130,7 +130,7 @@ export default function HomePage() {
         </form>
 
         {/* 예시 질문 태그 */}
-        <div className="relative mt-3 flex flex-wrap justify-center gap-1.5 sm:mt-4 sm:gap-2">
+        <div className="relative mt-2 flex flex-wrap justify-center gap-1.5 sm:mt-4 sm:gap-2">
           {EXAMPLE_TAGS.map((tag) => (
             <Link
               key={tag}
@@ -149,8 +149,8 @@ export default function HomePage() {
       </section>
 
       {/* ── 2. 빠른 시작 카드 ─────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-3xl px-4 pb-6 sm:pb-14">
-        <h2 className="mb-2 text-center text-base font-semibold text-brand-text-main sm:mb-6 sm:text-lg">
+      <section className="mx-auto min-h-0 w-full max-w-3xl flex-1 px-4 pb-2 sm:pb-14">
+        <h2 className="mb-1.5 text-center text-sm font-semibold text-brand-text-main sm:mb-6 sm:text-lg">
           무엇을 도와드릴까요?
         </h2>
 
@@ -159,7 +159,7 @@ export default function HomePage() {
             <Link key={card.href} href={card.href} className="group block">
               <div
                 className={cn(
-                  "flex h-full min-h-[112px] flex-col rounded-2xl border-2 border-gray-100 bg-white p-3 sm:min-h-[180px] sm:p-6",
+                  "flex h-full min-h-[70px] flex-col rounded-2xl border-2 border-gray-100 bg-white p-2.5 sm:min-h-[180px] sm:p-6",
                   "shadow-card",
                   "transition-all duration-200",
                   "group-hover:border-brand-primary group-hover:-translate-y-1 group-hover:shadow-card-hover",
@@ -168,23 +168,23 @@ export default function HomePage() {
                 {/* 기능 아이콘 */}
                 <span
                   className={cn(
-                    "mb-2 flex h-9 w-9 items-center justify-center rounded-xl sm:mb-4 sm:h-11 sm:w-11",
+                    "mb-1.5 flex h-8 w-8 items-center justify-center rounded-xl sm:mb-4 sm:h-11 sm:w-11",
                     card.tone,
                   )}
                   aria-hidden="true"
                 >
-                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <Icon className="h-4 w-4 sm:h-6 sm:w-6" />
                 </span>
 
-                <h3 className="mb-1 text-sm font-semibold text-gray-900 transition-colors group-hover:text-brand-primary sm:mb-1.5 sm:text-base">
+                <h3 className="mb-0.5 text-sm font-semibold text-gray-900 transition-colors group-hover:text-brand-primary sm:mb-1.5 sm:text-base">
                   {card.title}
                 </h3>
-                <p className="text-xs leading-snug text-gray-500 sm:text-sm sm:leading-relaxed">
+                <p className="hidden text-[11px] leading-snug text-gray-500 sm:block sm:text-sm sm:leading-relaxed">
                   {card.desc}
                 </p>
 
                 {/* 화살표 */}
-                <span className="mt-auto pt-2 text-[11px] font-medium text-brand-primary-light opacity-100 transition-opacity sm:mt-4 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
+                <span className="mt-auto hidden pt-1 text-[10px] font-medium text-brand-primary-light opacity-100 transition-opacity sm:mt-4 sm:inline sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
                   바로가기 →
                 </span>
               </div>
@@ -218,12 +218,11 @@ export default function HomePage() {
       </section>
 
       {/* ── 푸터 ──────────────────────────────────────────────────────────── */}
-      <footer className="mt-auto border-t border-gray-100 py-8 text-center text-xs text-gray-400">
+      <footer className="mt-auto hidden border-t border-gray-100 py-8 text-center text-xs text-gray-400 lg:block">
         © 2026 상생나침반 &middot; 서울 소상공인을 위한 AI 분석 플랫폼
       </footer>
 
       {/* 모바일 하단 탭바 여백 */}
-      <div className="h-16 lg:hidden" aria-hidden="true" />
     </div>
   );
 }

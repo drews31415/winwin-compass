@@ -152,7 +152,7 @@ function ChatContent() {
   };
 
   return (
-    <div className="fixed inset-x-0 top-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] flex overflow-hidden overscroll-none bg-white lg:static lg:h-screen">
+    <div className="fixed inset-x-0 top-0 bottom-[var(--mobile-tabbar-height)] flex overflow-hidden overscroll-none bg-white lg:static lg:h-screen">
       {/* 좌: 대화 목록 */}
       <SessionPanel firstMessage={firstUserMsg} onNewChat={clearMessages} />
 
