@@ -92,6 +92,38 @@ def _fallback_risk(area_cd: str) -> dict:
                 "factor": "폐업률",
                 "value": "12.4%",
                 "contribution": 0.36,
+                "description": "서울 평균보다 약간 높은 폐업률이 위험 점수에 반영되었습니다.",
+            },
+            {
+                "factor": "매출 변동성",
+                "value": "8.7%",
+                "contribution": 0.29,
+                "description": "분기별 매출 편차가 있어 계절성과 피크 시간대 의존도를 확인해야 합니다.",
+            },
+            {
+                "factor": "경쟁 강도",
+                "value": "동종 점포 밀집",
+                "contribution": 0.21,
+                "description": "동종 업종 신규 진입 가능성과 점포 밀집도가 위험 점수에 반영되었습니다.",
+            },
+        ],
+        "score_breakdown": {
+            "sales_score": 55,
+            "store_score": 66,
+            "population_score": 58,
+        },
+        "compared_to_avg": "+7점 (서울 평균 대비 약간 높음)",
+    }
+    return {
+        "area_cd": area_cd,
+        "risk_score": 62,
+        "risk_level": "중간",
+        "risk_probability": 0.62,
+        "main_risk_factors": [
+            {
+                "factor": "폐업률",
+                "value": "12.4%",
+                "contribution": 0.36,
                 "description": "서울 평균보다 약간 높은 수준입니다.",
             },
             {

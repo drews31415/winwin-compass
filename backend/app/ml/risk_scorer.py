@@ -206,17 +206,94 @@ class RiskScorer:
 
     def _rule_based_factors(self, latest: pd.DataFrame) -> list[dict]:
         row = latest.iloc[0]
+        sales_growth_qoq = float(row.get("sales_growth_qoq") or 0)
+        sales_growth_yoy = float(row.get("sales_growth_yoy") or 0)
+        store_growth_qoq = float(row.get("store_growth_qoq") or 0)
+        population_growth_qoq = float(row.get("population_growth_qoq") or 0)
+
         candidates = [
-            self._factor_payload("close_rate", row, float(row.get("close_rate") or 0) / 100),
-            self._factor_payload("sales_growth_yoy", row, abs(float(row.get("sales_growth_yoy") or 0))),
-            self._factor_payload("store_growth_qoq", row, abs(float(row.get("store_growth_qoq") or 0))),
+            (
+                float(row.get("close_rate") or 0) / 100,
+                self._factor_payload("close_rate", row, float(row.get("close_rate") or 0) / 100),
+            ),
+            (
+                max(0.0, -sales_growth_qoq, -sales_growth_yoy),
+                self._factor_payload(
+                    "sales_growth_qoq" if sales_growth_qoq <= sales_growth_yoy else "sales_growth_yoy",
+                    row,
+                    max(0.0, -sales_growth_qoq, -sales_growth_yoy),
+                ),
+            ),
+            (
+                max(0.0, store_growth_qoq),
+                self._factor_payload("store_growth_qoq", row, max(0.0, store_growth_qoq)),
+            ),
+            (
+                max(0.0, -population_growth_qoq),
+                self._factor_payload("population_growth_qoq", row, max(0.0, -population_growth_qoq)),
+            ),
         ]
-        return candidates[:3]
+        sorted_candidates = sorted(candidates, key=lambda item: item[0], reverse=True)
+        meaningful = [payload for score, payload in sorted_candidates if score > 0.005]
+        if len(meaningful) < 3:
+            meaningful.extend([
+                self._factor_payload("young_ratio", row, 0.08),
+                self._factor_payload("worker_ratio", row, 0.06),
+            ])
+        return meaningful[:3]
 
     def _factor_payload(self, column: str, row: pd.Series, contribution: float) -> dict:
         value = float(row.get(column) or 0)
         if pd.isna(value):
             value = 0.0
+        if column == "close_rate":
+            return {
+                "factor": "폐업률",
+                "value": f"{value:.1f}%",
+                "contribution": round(contribution, 4),
+                "description": "최근 폐업률 수준이 위험 점수에 반영되었습니다.",
+            }
+        if column in {"sales_growth_qoq", "sales_growth_yoy"}:
+            period = "전분기" if column == "sales_growth_qoq" else "전년"
+            direction = "감소" if value < 0 else "증가"
+            return {
+                "factor": "매출 감소" if value < 0 else "매출 변동",
+                "value": f"{period} 대비 {value * 100:+.1f}%",
+                "contribution": round(contribution, 4),
+                "description": f"{period} 대비 매출 {direction} 흐름이 위험 점수에 반영되었습니다.",
+            }
+        if column == "competition_index":
+            return {
+                "factor": "경쟁 강도",
+                "value": f"{value:.2f}",
+                "contribution": round(contribution, 4),
+                "description": "상권 내 점포 밀집도와 매출 대비 경쟁 수준이 반영되었습니다.",
+            }
+        if column == "store_growth_qoq":
+            direction = "증가" if value >= 0 else "감소"
+            return {
+                "factor": "경쟁 심화" if value >= 0 else "점포 감소",
+                "value": f"점포 {value * 100:+.1f}% {direction}",
+                "contribution": round(contribution, 4),
+                "description": "전분기 대비 점포 수 변화가 위험 점수에 반영되었습니다.",
+            }
+        if column in {"population_growth_qoq", "worker_ratio", "young_ratio"}:
+            if column == "population_growth_qoq":
+                direction = "감소" if value < 0 else "증가"
+                value_label = f"전분기 대비 {value * 100:+.1f}%"
+                description = f"생활인구 {direction} 흐름이 상권 수요 위험에 반영되었습니다."
+            elif column == "worker_ratio":
+                value_label = f"직장인구 비중 {value * 100:.1f}%"
+                description = "직장인구 비중이 상권 수요 안정성 판단에 반영되었습니다."
+            else:
+                value_label = f"20~30대 비중 {value * 100:.1f}%"
+                description = "주요 소비 연령대 비중이 상권 수요 판단에 반영되었습니다."
+            return {
+                "factor": "인구 변화",
+                "value": value_label,
+                "contribution": round(contribution, 4),
+                "description": description,
+            }
         if column == "close_rate":
             return {
                 "factor": "폐업률",

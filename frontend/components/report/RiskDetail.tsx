@@ -38,6 +38,7 @@ export function RiskDetail({ areaCd }: { areaCd: string }) {
   }, [areaCd]);
 
   const risk = data ?? SAMPLE_RISK;
+  const markerPosition = Math.min(98, Math.max(0, risk.risk_score));
 
   return (
     <section className="rounded-lg border border-brand-primary/10 bg-white p-5 shadow-card">
@@ -64,7 +65,7 @@ export function RiskDetail({ areaCd }: { areaCd: string }) {
             <div className="h-3 overflow-hidden rounded-full bg-gray-100">
               <div
                 className="h-full rounded-full bg-brand-primary"
-                style={{ width: `${Math.min(100, Math.round(factor.contribution * 100))}%` }}
+                style={{ width: `${Math.min(100, Math.max(6, Math.round(factor.contribution * 100)))}%` }}
               />
             </div>
             <p className="mt-1 text-sm leading-6 text-brand-text-muted">{factor.description}</p>
@@ -79,7 +80,7 @@ export function RiskDetail({ areaCd }: { areaCd: string }) {
         </div>
         <div className="relative h-3 rounded-full bg-gradient-to-r from-brand-risk-low via-brand-accent to-brand-risk-high">
           <span className="absolute top-1/2 h-5 w-0.5 -translate-y-1/2 bg-white shadow" style={{ left: "57%" }} />
-          <span className="absolute top-1/2 h-6 w-2 -translate-y-1/2 rounded-full bg-brand-text-main" style={{ left: `${risk.risk_score}%` }} />
+          <span className="absolute top-1/2 h-6 w-2 -translate-y-1/2 rounded-full bg-brand-text-main" style={{ left: `${markerPosition}%` }} />
         </div>
       </div>
     </section>
