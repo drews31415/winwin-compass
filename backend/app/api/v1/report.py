@@ -2,16 +2,12 @@
 GET /api/v1/report/{area_cd}  — 상권 종합 리포트 (차트 데이터 + 마크다운 + 매칭 정책)
 """
 import logging
-from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.prompts import REPORT_PROMPT, SYSTEM_PROMPT
-from app.ai.rag_engine import PolicyRAGEngine
-from app.ai.chat_engine import _DEV_NOTICE
-from app.core.config import settings
+from app.ai.rag_engine import DEMO_POLICIES
 from app.core.database import get_db
 from app.data.processors.transformer import calculate_risk_score
 from app.models.database import (
@@ -21,8 +17,6 @@ from app.models.schemas import ReportChartsOut, ReportOut
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
-_rag   = PolicyRAGEngine()
-_llm: Any = None
 
 
 def _sample_report(area_cd: str) -> ReportOut:
@@ -71,18 +65,6 @@ def _sample_report(area_cd: str) -> ReportOut:
             }
         ],
     )
-
-
-def _get_llm():
-    global _llm
-    if _llm is None:
-        from langchain_openai import ChatOpenAI
-        _llm = ChatOpenAI(
-            model="gpt-4o-mini",
-            temperature=0.3,
-            api_key=settings.OPENAI_API_KEY,
-        )
-    return _llm
 
 
 # ── 헬퍼 ───────────────────────────────────────────────────────────────────────
@@ -179,25 +161,46 @@ async def _generate_report_md(
     pop_row,
     risk_score: float,
 ) -> str:
-    """REPORT_PROMPT + gpt-4o-mini로 마크다운 리포트 생성. API 키 없으면 템플릿 반환."""
-    context = REPORT_PROMPT.format(
-        area_nm=area_nm,
-        sales_data=_fmt_sales(sales_rows),
-        store_data=_fmt_stores(store_rows),
-        population_data=_fmt_pop(pop_row),
-        risk_score=round(risk_score, 1),
+    """Generate a fast data-based report body for the detail page."""
+    monthly_sales = sum(row.monthly_sales_avg or 0 for row in sales_rows)
+    store_count = sum(row.store_count or 0 for row in store_rows)
+    avg_close_rate = (
+        sum(row.close_rate or 0 for row in store_rows) / len(store_rows)
+        if store_rows else 0
+    )
+    sales_eok = monthly_sales / 100_000_000
+
+    population_text = _fmt_pop(pop_row)
+    risk_label = "낮은 편" if risk_score < 40 else "중간" if risk_score < 70 else "높은 편"
+    opportunity = (
+        "현재 위험도가 낮아 신규 고객 유입을 늘리는 마케팅과 메뉴 실험을 병행하기 좋습니다."
+        if risk_score < 40
+        else "경쟁과 비용 부담을 함께 관리하면서 검증된 메뉴와 재방문 장치를 우선 설계하는 편이 좋습니다."
+        if risk_score < 70
+        else "초기 고정비를 낮추고 보수적인 매출 시나리오로 진입 여부를 판단해야 합니다."
     )
 
-    if not settings.OPENAI_API_KEY:
-        return _DEV_NOTICE + context
-
-    from langchain_core.messages import HumanMessage, SystemMessage
-
-    resp = await _get_llm().ainvoke([
-        SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content=context),
-    ])
-    return resp.content
+    return (
+        "## 상권 종합 평가\n"
+        f"{area_nm} 상권은 최신 공공데이터 기준 월평균 매출 약 {sales_eok:.1f}억원, "
+        f"점포 {store_count:,}개 수준으로 확인됩니다. 폐업 위험 점수는 {risk_score:.1f}점으로 "
+        f"{risk_label}입니다.\n\n"
+        "## 매출 현황\n"
+        f"{_fmt_sales(sales_rows)}\n"
+        "시간대별 매출과 최근 분기 추이를 함께 보면 피크 시간대 의존도와 단기 매출 방향을 확인할 수 있습니다.\n\n"
+        "## 유동인구 분석\n"
+        f"{population_text}\n"
+        "주요 생활인구 연령대에 맞춰 상품 가격대, 매장 체류형/포장형 비중, 홍보 채널을 조정하는 것이 좋습니다.\n\n"
+        "## 위험 신호\n"
+        f"최신 점포 데이터 기준 평균 폐업률은 {avg_close_rate:.1f}%입니다. "
+        "동종 업종 점포 수와 매출 변동성을 함께 보고 과밀 진입을 피해야 합니다.\n\n"
+        "## 기회 요인\n"
+        f"{opportunity}\n\n"
+        "## 추천 업종\n"
+        "- 카페/음료: 생활인구와 회전율을 활용하기 좋습니다.\n"
+        "- 간편식/포장형 음식점: 점심과 퇴근 시간대 수요를 동시에 노릴 수 있습니다.\n"
+        "- 소형 특화 매장: 고정비를 낮추고 차별화된 메뉴로 테스트하기 좋습니다."
+    )
 
 
 # ── 엔드포인트 ────────────────────────────────────────────────────────────────
@@ -284,14 +287,8 @@ async def get_area_report(
         area_nm, sales_rows, store_rows, pop_row, risk_score
     )
 
-    # 7. 매칭 정책 (RAG) — area_nm이 코드처럼 보이면 제네릭 쿼리로 폴백
-    try:
-        matched_policies = await _rag.search_policies(area_nm, k=3)
-        if not matched_policies:
-            matched_policies = await _rag.search_policies("소상공인 지원", k=3)
-    except Exception as exc:
-        logger.warning("policy search failed: %s", exc)
-        matched_policies = []
+    # 7. 리포트 화면은 진입 속도가 중요하므로 벡터 검색 대신 안정적인 정책 샘플을 즉시 제공한다.
+    matched_policies = DEMO_POLICIES[:3]
 
     return ReportOut(
         area_nm=area_nm,
