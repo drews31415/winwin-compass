@@ -19,6 +19,18 @@ SALES_COLUMNS = ["sales_growth_qoq", "sales_growth_yoy", "sales_volatility", "sa
 STORE_COLUMNS = ["close_rate", "open_close_ratio", "competition_index", "store_growth_qoq"]
 POPULATION_COLUMNS = ["population_growth_qoq", "worker_ratio", "young_ratio", "sales_per_population"]
 
+DEMO_RISK_PROFILES = {
+    "3130210": {"risk_score": 42, "sales": 47, "store": 58, "population": 36, "close_rate": "11.8%", "sales_change": "전분기 대비 -1.3%", "young_ratio": "20~30대 비중 75.0%"},
+    "3120190": {"risk_score": 49, "sales": 51, "store": 61, "population": 38, "close_rate": "12.6%", "sales_change": "전분기 대비 -2.0%", "young_ratio": "20~30대 비중 68.0%"},
+    "3111042": {"risk_score": 36, "sales": 39, "store": 52, "population": 34, "close_rate": "9.4%", "sales_change": "전분기 대비 +1.1%", "young_ratio": "20~30대 비중 58.0%"},
+    "3130154": {"risk_score": 61, "sales": 63, "store": 72, "population": 41, "close_rate": "14.8%", "sales_change": "전분기 대비 -3.1%", "young_ratio": "20~30대 비중 70.0%"},
+    "3110082": {"risk_score": 54, "sales": 56, "store": 64, "population": 37, "close_rate": "13.5%", "sales_change": "전분기 대비 -2.2%", "young_ratio": "20~30대 비중 62.0%"},
+    "3120068": {"risk_score": 47, "sales": 49, "store": 60, "population": 35, "close_rate": "12.1%", "sales_change": "전분기 대비 -1.6%", "young_ratio": "20~30대 비중 55.0%"},
+    "3140101": {"risk_score": 39, "sales": 43, "store": 55, "population": 33, "close_rate": "10.2%", "sales_change": "전분기 대비 +0.8%", "young_ratio": "20~30대 비중 52.0%"},
+    "3150088": {"risk_score": 52, "sales": 54, "store": 63, "population": 39, "close_rate": "13.0%", "sales_change": "전분기 대비 -2.1%", "young_ratio": "20~30대 비중 49.0%"},
+    "3120145": {"risk_score": 44, "sales": 46, "store": 57, "population": 35, "close_rate": "11.4%", "sales_change": "전분기 대비 -1.0%", "young_ratio": "20~30대 비중 44.0%"},
+}
+
 
 class RiskScorer:
     """Train and serve XGBoost closure-risk scores."""
@@ -123,8 +135,7 @@ class RiskScorer:
         """Rule-based fallback when trained artifacts are unavailable."""
         frame = await self.feature_engineer.get_area_features(area_cd, db)
         if frame.empty:
-            score = 30
-            latest = pd.DataFrame([{column: 0 for column in self.feature_columns}])
+            return self._demo_profile_score(area_cd)
         else:
             latest = frame.tail(1)
             row = latest.iloc[0]
@@ -156,6 +167,52 @@ class RiskScorer:
             "risk_probability": probability,
             "main_risk_factors": self._rule_based_factors(latest),
             "score_breakdown": self._score_breakdown(latest),
+            "compared_to_avg": self._compared_to_avg(score),
+        }
+
+    def _demo_profile_score(self, area_cd: str) -> dict:
+        profile = DEMO_RISK_PROFILES.get(area_cd)
+        if not profile:
+            profile = {
+                "risk_score": 45,
+                "sales": 45,
+                "store": 55,
+                "population": 40,
+                "close_rate": "12.0%",
+                "sales_change": "데이터 준비 중",
+                "young_ratio": "주요 수요층 확인 중",
+            }
+        score = int(profile["risk_score"])
+        return {
+            "area_cd": area_cd,
+            "risk_score": score,
+            "risk_level": self.get_risk_level(score),
+            "risk_probability": round(score / 100, 4),
+            "main_risk_factors": [
+                {
+                    "factor": "폐업률",
+                    "value": profile["close_rate"],
+                    "contribution": 0.26,
+                    "description": "데모 상권 프로필의 폐업률 수준을 기준으로 위험도를 추정했습니다.",
+                },
+                {
+                    "factor": "매출 변동",
+                    "value": profile["sales_change"],
+                    "contribution": 0.18,
+                    "description": "최근 매출 흐름을 반영한 데모 추정값입니다.",
+                },
+                {
+                    "factor": "수요 구조",
+                    "value": profile["young_ratio"],
+                    "contribution": 0.12,
+                    "description": "주요 소비 연령대 비중을 기준으로 수요 안정성을 추정했습니다.",
+                },
+            ],
+            "score_breakdown": {
+                "sales_score": int(profile["sales"]),
+                "store_score": int(profile["store"]),
+                "population_score": int(profile["population"]),
+            },
             "compared_to_avg": self._compared_to_avg(score),
         }
 
