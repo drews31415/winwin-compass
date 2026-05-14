@@ -45,6 +45,8 @@ export type AreaFilters = {
   gu_nm?: string;
   area_type?: string;
   q?: string;
+  limit?: number;
+  offset?: number;
 };
 
 export type Area = {

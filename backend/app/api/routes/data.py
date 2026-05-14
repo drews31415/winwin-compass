@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import AsyncSessionLocal, get_db
@@ -71,18 +71,35 @@ async def _bg_collect(area_cd: str, year_quarter: str) -> None:
 async def list_areas(
     gu_nm: str | None = None,
     area_type: str | None = None,
+    q: str | None = None,
     limit: int = 50,
     offset: int = 0,
     db: AsyncSession = Depends(get_db),
 ):
     stmt = select(CommercialArea)
+    if q:
+        term = f"%{q.strip()}%"
+        stmt = stmt.where(
+            or_(
+                CommercialArea.area_nm.ilike(term),
+                CommercialArea.gu_nm.ilike(term),
+                CommercialArea.area_type.ilike(term),
+                CommercialArea.area_cd.ilike(term),
+            )
+        )
     if gu_nm:
         stmt = stmt.where(CommercialArea.gu_nm.ilike(f"%{gu_nm}%"))
     if area_type:
         stmt = stmt.where(CommercialArea.area_type == area_type)
+    limit = max(1, min(limit, 100))
+    offset = max(0, offset)
     stmt = stmt.order_by(CommercialArea.area_nm).offset(offset).limit(limit)
 
-    rows = (await db.execute(stmt)).scalars().all()
+    try:
+        rows = (await db.execute(stmt)).scalars().all()
+    except Exception as exc:
+        logger.exception("area list query failed")
+        raise HTTPException(status_code=503, detail="상권 목록 데이터를 조회할 수 없습니다.") from exc
     return [AreaOut.model_validate(r) for r in rows]
 
 
@@ -112,6 +129,41 @@ _SAMPLE_MAP_AREAS: list[dict] = [
 ]
 
 
+def _sample_area_list(
+    q: str | None = None,
+    gu_nm: str | None = None,
+    area_type: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+) -> list[AreaOut]:
+    data = _SAMPLE_MAP_AREAS
+    if q:
+        term = q.strip().lower()
+        data = [
+            area for area in data
+            if any(
+                term in str(area.get(key, "")).lower()
+                for key in ("area_cd", "area_nm", "gu_nm", "area_type")
+            )
+        ]
+    if gu_nm:
+        data = [area for area in data if gu_nm in area["gu_nm"]]
+    if area_type:
+        data = [area for area in data if area["area_type"] == area_type]
+
+    return [
+        AreaOut(
+            area_cd=area["area_cd"],
+            area_nm=area["area_nm"],
+            gu_nm=area["gu_nm"],
+            area_type=area["area_type"],
+            geom_lat=area["lat"],
+            geom_lng=area["lng"],
+        )
+        for area in data[offset:offset + limit]
+    ]
+
+
 @router.get("/areas/map", response_model=list[AreaMapFeature], summary="지도용 상권 집약 데이터")
 async def list_areas_map(
     gu_nm: str | None = None,
@@ -123,25 +175,6 @@ async def list_areas_map(
     지도 마커 렌더링용. 각 상권의 좌표·매출·위험도를 하나의 응답으로 반환.
     DB에 데이터가 5개 미만이면 개발용 샘플 데이터를 반환한다.
     """
-    try:
-        count_result = await db.execute(
-            select(func.count()).select_from(CommercialArea).where(CommercialArea.geom_lat.isnot(None))
-        )
-        total = count_result.scalar_one()
-    except Exception as exc:
-        logger.warning("map sample fallback: %s", exc)
-        total = 0
-
-    if total < 5:
-        data = _SAMPLE_MAP_AREAS
-        if gu_nm:
-            data = [a for a in data if gu_nm in a["gu_nm"]]
-        if area_type:
-            data = [a for a in data if a["area_type"] == area_type]
-        if risk_max is not None:
-            data = [a for a in data if a["risk_score"] <= risk_max]
-        return [AreaMapFeature(**a) for a in data]
-
     # DB 데이터: CommercialArea LEFT JOIN 최신 SalesData + StoreCount
     from sqlalchemy import case, literal_column
     stmt = (
@@ -173,10 +206,15 @@ async def list_areas_map(
         CommercialArea.geom_lng,
     ).order_by(CommercialArea.area_nm).limit(500)
 
-    rows = (await db.execute(stmt)).mappings().all()
+    try:
+        rows = (await db.execute(stmt)).mappings().all()
+    except Exception as exc:
+        logger.exception("area map query failed")
+        raise HTTPException(status_code=503, detail="지도 상권 데이터를 조회할 수 없습니다.") from exc
     features = []
     for r in rows:
-        score = float(r["risk_score"])
+        raw_score = float(r["risk_score"])
+        score = raw_score / 100 if raw_score > 1 else raw_score
         if risk_max is not None and score > risk_max:
             continue
         features.append(AreaMapFeature(

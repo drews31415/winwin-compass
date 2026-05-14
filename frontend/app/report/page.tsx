@@ -5,35 +5,16 @@ import { useEffect, useMemo, useState } from "react";
 import { BarChart3, Clock3, Search, Star, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getAreas, type Area } from "@/lib/api";
 
 type ReportArea = {
   area_cd: string;
   area_nm: string;
   gu_nm: string;
   area_type: string;
-  monthly_sales_avg?: number;
-  risk_score?: number;
 };
 
-const POPULAR_AREAS: ReportArea[] = [
-  { area_cd: "3110016", area_nm: "종로3가", gu_nm: "종로구", area_type: "지역상권", monthly_sales_avg: 230000000, risk_score: 58 },
-  { area_cd: "3130210", area_nm: "홍대입구", gu_nm: "마포구", area_type: "발달상권", monthly_sales_avg: 410000000, risk_score: 42 },
-  { area_cd: "3120190", area_nm: "연남동", gu_nm: "마포구", area_type: "지역상권", monthly_sales_avg: 280000000, risk_score: 49 },
-  { area_cd: "3111042", area_nm: "성수역", gu_nm: "성동구", area_type: "발달상권", monthly_sales_avg: 360000000, risk_score: 36 },
-  { area_cd: "3130154", area_nm: "신촌역", gu_nm: "서대문구", area_type: "발달상권", monthly_sales_avg: 310000000, risk_score: 61 },
-  { area_cd: "3110082", area_nm: "익선동", gu_nm: "종로구", area_type: "지역상권", monthly_sales_avg: 220000000, risk_score: 54 },
-  { area_cd: "3120068", area_nm: "이태원역", gu_nm: "용산구", area_type: "관광특구", monthly_sales_avg: 390000000, risk_score: 47 },
-  { area_cd: "3140101", area_nm: "강남역", gu_nm: "강남구", area_type: "발달상권", monthly_sales_avg: 520000000, risk_score: 39 },
-  { area_cd: "3150088", area_nm: "잠실새내", gu_nm: "송파구", area_type: "지역상권", monthly_sales_avg: 260000000, risk_score: 52 },
-  { area_cd: "3120145", area_nm: "망원시장", gu_nm: "마포구", area_type: "전통시장", monthly_sales_avg: 180000000, risk_score: 44 },
-];
-
 const RECENT_KEY = "brand-recent-reports";
-
-function formatSales(value?: number) {
-  if (!value) return "데이터 준비중";
-  return `${(value / 100000000).toFixed(1)}억`;
-}
 
 function readRecentAreas(): ReportArea[] {
   if (typeof window === "undefined") return [];
@@ -44,21 +25,55 @@ function readRecentAreas(): ReportArea[] {
   }
 }
 
+function toReportArea(area: Area): ReportArea {
+  return {
+    area_cd: area.area_cd,
+    area_nm: area.area_nm,
+    gu_nm: area.gu_nm,
+    area_type: area.area_type,
+  };
+}
+
 export default function ReportPage() {
   const [query, setQuery] = useState("");
   const [recentAreas, setRecentAreas] = useState<ReportArea[]>([]);
+  const [areas, setAreas] = useState<ReportArea[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setRecentAreas(readRecentAreas());
   }, []);
 
-  const filteredAreas = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return POPULAR_AREAS;
-    return POPULAR_AREAS.filter((area) =>
-      [area.area_nm, area.gu_nm, area.area_type].some((value) => value.toLowerCase().includes(q)),
-    );
-  }, [query]);
+  const trimmedQuery = query.trim();
+
+  useEffect(() => {
+    let ignore = false;
+    const timer = window.setTimeout(() => {
+      setIsLoading(true);
+      getAreas({ q: trimmedQuery || undefined, limit: 50 })
+        .then((result) => {
+          if (ignore) return;
+          setAreas(result.map(toReportArea));
+          setError(null);
+        })
+        .catch((event: Error) => {
+          if (ignore) return;
+          setAreas([]);
+          setError(event.message);
+        })
+        .finally(() => {
+          if (!ignore) setIsLoading(false);
+        });
+    }, trimmedQuery ? 250 : 0);
+
+    return () => {
+      ignore = true;
+      window.clearTimeout(timer);
+    };
+  }, [trimmedQuery]);
+
+  const heading = useMemo(() => (trimmedQuery ? "검색 결과" : "수집된 상권"), [trimmedQuery]);
 
   return (
     <div className="min-h-screen bg-brand-surface px-4 py-8 pb-24 lg:px-10 lg:py-10">
@@ -70,10 +85,10 @@ export default function ReportPage() {
           </div>
           <div className="space-y-2">
             <h1 className="font-display text-3xl font-bold text-brand-text-main sm:text-4xl">
-              분석할 상권을 선택하세요
+              실제 수집 데이터가 있는 상권을 선택하세요
             </h1>
             <p className="text-base text-brand-text-muted">
-              매출 추이, 시간대별 특성, 인구 구성, 위험도와 추천 정책을 한 화면에서 확인합니다.
+              검색 결과와 리포트는 DB에 수집된 서울시 상권 데이터만 표시합니다.
             </p>
           </div>
         </header>
@@ -85,10 +100,15 @@ export default function ReportPage() {
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="상권명, 자치구, 상권유형을 입력하세요"
+              placeholder="상권명, 자치구, 상권유형, 상권코드를 입력하세요"
               className="h-12 pl-10 text-base"
             />
           </div>
+          {error && (
+            <p className="mt-2 text-sm text-red-600">
+              실제 상권 데이터를 불러오지 못했습니다. 백엔드 DB 연결과 수집 상태를 확인하세요. ({error})
+            </p>
+          )}
         </section>
 
         {recentAreas.length > 0 && (
@@ -109,32 +129,36 @@ export default function ReportPage() {
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 text-brand-accent" />
-              <h2 className="text-lg font-bold text-brand-text-main">인기 상권 TOP 10</h2>
+              <h2 className="text-lg font-bold text-brand-text-main">{heading}</h2>
             </div>
-            <span className="text-sm text-brand-text-muted">{filteredAreas.length}개 표시</span>
+            <span className="text-sm text-brand-text-muted">
+              {isLoading ? "불러오는 중" : `${areas.length}개 표시`}
+            </span>
           </div>
-          <div className="grid gap-3">
-            {filteredAreas.map((area, index) => (
-              <AreaListItem key={area.area_cd} area={area} rank={index + 1} />
-            ))}
-          </div>
+
+          {!isLoading && areas.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-gray-200 bg-white p-8 text-center text-sm text-brand-text-muted">
+              표시할 실제 수집 상권 데이터가 없습니다.
+            </div>
+          ) : (
+            <div className="grid gap-3">
+              {areas.map((area) => (
+                <AreaListItem key={area.area_cd} area={area} />
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </div>
   );
 }
 
-function AreaListItem({ area, rank, compact = false }: { area: ReportArea; rank?: number; compact?: boolean }) {
+function AreaListItem({ area, compact = false }: { area: ReportArea; compact?: boolean }) {
   return (
     <Link
       href={`/report/${area.area_cd}`}
-      className="group grid gap-3 rounded-lg border border-transparent bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-card-hover md:grid-cols-[auto_1fr_auto]"
+      className="group grid gap-3 rounded-lg border border-transparent bg-white p-4 shadow-card transition hover:-translate-y-0.5 hover:border-brand-primary/40 hover:shadow-card-hover md:grid-cols-[1fr_auto]"
     >
-      {!compact && (
-        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-brand-primary/10 text-sm font-bold text-brand-primary">
-          {rank}
-        </div>
-      )}
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="truncate text-base font-bold text-brand-text-main">{area.area_nm}</h3>
@@ -144,16 +168,14 @@ function AreaListItem({ area, rank, compact = false }: { area: ReportArea; rank?
         </div>
         <p className="mt-1 text-sm text-brand-text-muted">{area.gu_nm}</p>
       </div>
-      <div className="flex items-center justify-between gap-4 md:justify-end">
-        <div className="text-right">
-          <p className="text-xs text-brand-text-muted">월평균 매출</p>
-          <p className="font-bold text-brand-text-main">{formatSales(area.monthly_sales_avg)}</p>
+      {!compact && (
+        <div className="flex items-center justify-end">
+          <Button className="bg-brand-primary hover:bg-brand-primary-dark">
+            <TrendingUp className="mr-2 h-4 w-4" />
+            리포트 보기
+          </Button>
         </div>
-        <Button className="bg-brand-primary hover:bg-brand-primary-dark">
-          <TrendingUp className="mr-2 h-4 w-4" />
-          리포트 보기
-        </Button>
-      </div>
+      )}
     </Link>
   );
 }

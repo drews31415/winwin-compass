@@ -248,9 +248,8 @@ export default function ReportDetailPage() {
       })
       .catch((event: Error) => {
         if (!alive) return;
-        const fallback = normalizeReport(sampleReport(areaCd), areaCd);
         setError(event.message);
-        setReport(fallback);
+        setReport(null);
       })
       .finally(() => {
         if (alive) setIsLoading(false);
@@ -279,6 +278,23 @@ export default function ReportDetailPage() {
     const slots = report?.charts.time_slots ?? [];
     return slots.reduce((max, item) => ((item.ratio ?? 0) > (max.ratio ?? 0) ? item : max), slots[0]);
   }, [report]);
+
+  if (!isLoading && !report) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-brand-surface px-4">
+        <div className="max-w-md rounded-lg border border-gray-200 bg-white p-6 text-center shadow-card">
+          <h1 className="text-xl font-black text-brand-text-main">수집된 리포트 데이터가 없습니다</h1>
+          <p className="mt-3 text-sm leading-6 text-brand-text-muted">
+            이 상권의 매출, 점포, 인구 데이터가 DB에 수집되어야 실제 리포트를 볼 수 있습니다.
+            {error ? ` (${error})` : ""}
+          </p>
+          <Button asChild className="mt-5 bg-brand-primary hover:bg-brand-primary-dark">
+            <Link href="/report">상권 목록으로 돌아가기</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading || !report) {
     return (
