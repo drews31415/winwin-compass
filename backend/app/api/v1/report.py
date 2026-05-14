@@ -343,7 +343,7 @@ async def get_area_report(
         area_nm, sales_rows, store_rows, pop_row, risk_score
     )
 
-    # 7. 리포트 화면은 진입 속도가 중요하므로 벡터 검색 대신 안정적인 정책 샘플을 즉시 제공한다.
+    # 7. 리포트 화면은 진입 속도가 중요하므로 벡터 검색 대신 정책 샘플을 즉시 제공한다.
     matched_policies = DEMO_POLICIES[:3]
 
     return ReportOut(
