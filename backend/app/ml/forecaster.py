@@ -17,6 +17,7 @@ from app.models.database import PopulationData, SalesData, StoreCount
 
 
 REGRESSORS = ["store_count", "population", "close_rate"]
+MIN_INTERVAL_HALF_WIDTH_RATIO = 0.12
 
 
 def _quarter_to_date(year_quarter: str) -> pd.Timestamp:
@@ -137,6 +138,7 @@ class SalesForecaster:
             predicted = max(0.0, float(np.expm1(row["yhat"])))
             lower = max(0.0, float(np.expm1(row["yhat_lower"])))
             upper = max(0.0, float(np.expm1(row["yhat_upper"])))
+            lower, upper = self._calibrate_interval(predicted, lower, upper)
             items.append(
                 {
                     "quarter": _date_to_quarter(row["ds"]),
@@ -152,7 +154,7 @@ class SalesForecaster:
             "area_cd": area_cd,
             "forecast": items,
             "trend_summary": self._trend_summary(history),
-            "confidence": self._confidence_score(future_forecast),
+            "confidence": self._confidence_score_from_items(items),
             "model_trained_at": self.trained_at_cache.get(area_cd, datetime.utcnow()),
         }
 
@@ -182,6 +184,13 @@ class SalesForecaster:
         if change <= -0.03:
             return "하락"
         return "보합"
+
+    def _calibrate_interval(self, predicted: float, lower: float, upper: float) -> tuple[float, float]:
+        """Keep Prophet intervals visible and realistic for short quarterly demo series."""
+        if predicted <= 0:
+            return lower, upper
+        min_half_width = predicted * MIN_INTERVAL_HALF_WIDTH_RATIO
+        return max(0.0, min(lower, predicted - min_half_width)), max(upper, predicted + min_half_width)
 
     async def _get_or_train_model(self, area_cd: str, db: AsyncSession | None) -> Prophet:
         if area_cd in self.model_cache:
@@ -258,6 +267,18 @@ class SalesForecaster:
         if interval_ratio.empty:
             return 0.5
         confidence = 1 - min(float(interval_ratio.mean()), 1.0)
+        return round(max(0.0, min(confidence, 1.0)), 2)
+
+    def _confidence_score_from_items(self, items: list[dict[str, Any]]) -> float:
+        ratios = []
+        for item in items:
+            predicted = item.get("predicted_sales") or 0
+            if predicted <= 0:
+                continue
+            ratios.append((item.get("upper_bound", 0) - item.get("lower_bound", 0)) / predicted)
+        if not ratios:
+            return 0.5
+        confidence = 1 - min(float(np.mean(ratios)), 1.0)
         return round(max(0.0, min(confidence, 1.0)), 2)
 
     def _model_name(self, area_cd: str) -> str:
